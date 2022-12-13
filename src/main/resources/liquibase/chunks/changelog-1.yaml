@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: config_table_init
+      author: anton
+      changes:
+        - createTable:
+            tableName: config
+            remarks: config table
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: key
+                  type: varchar
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: value
+                  type: varchar
+                  constraints:
+                    unique: true
+                    nullable: false

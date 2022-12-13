@@ -1,4 +1,4 @@
-package com.dag.lets_play.stadium
+package com.dag.lets_play.mvc.model
 
 data class GetStadiumRequest(val location: Location, val radius: Double)
 

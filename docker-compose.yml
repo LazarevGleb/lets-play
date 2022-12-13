@@ -1,0 +1,10 @@
+services:
+  postgres:
+    image: postgres:12.2
+    container_name: postgresql
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: lets_play
+    ports:
+      - '5432:5432'

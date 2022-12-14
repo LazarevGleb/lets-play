@@ -1,6 +1,5 @@
-package com.dag.lets_play.mvc.repository
+package com.dag.lets_play.stadium
 
-import com.dag.lets_play.mvc.entity.StadiumEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 

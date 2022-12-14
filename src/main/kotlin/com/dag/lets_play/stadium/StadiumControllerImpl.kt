@@ -1,8 +1,5 @@
-package com.dag.lets_play.mvc.controller
+package com.dag.lets_play.stadium
 
-import com.dag.lets_play.mvc.model.GetStadiumRequest
-import com.dag.lets_play.mvc.model.Stadium
-import com.dag.lets_play.mvc.service.StadiumService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 

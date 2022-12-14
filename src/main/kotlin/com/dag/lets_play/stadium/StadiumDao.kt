@@ -1,11 +1,8 @@
-package com.dag.lets_play.mvc.dao
+package com.dag.lets_play.stadium
 
-import com.dag.lets_play.mvc.model.Location
-import com.dag.lets_play.mvc.model.Stadium
-import com.dag.lets_play.mvc.repository.StadiumRepository
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Repository
 
-@Component
+@Repository
 class StadiumDao(private val repo: StadiumRepository) {
     fun getStadiums(location: Location, radius: Double): Set<Stadium> {
         return setOf(

@@ -1,8 +1,5 @@
-package com.dag.lets_play.mvc.service
+package com.dag.lets_play.stadium
 
-import com.dag.lets_play.mvc.dao.StadiumDao
-import com.dag.lets_play.mvc.model.GetStadiumRequest
-import com.dag.lets_play.mvc.model.Stadium
 import org.springframework.stereotype.Service
 
 @Service

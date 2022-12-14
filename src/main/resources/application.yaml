@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/lets_play
+    username: postgres
+    password: postgres
+    pool-size: 5
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    enabled: false
+    change-log: classpath:liquibase/changelog.yaml

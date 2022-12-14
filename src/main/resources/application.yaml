@@ -1,9 +1,10 @@
 spring:
+  application:
+    name: "let's play" 
   datasource:
     url: jdbc:postgresql://localhost:5432/lets_play
     username: postgres
     password: postgres
-    pool-size: 5
   jpa:
     show-sql: true
     hibernate:
@@ -11,3 +12,5 @@ spring:
   liquibase:
     enabled: false
     change-log: classpath:liquibase/changelog.yaml
+server:
+  port: 8081 

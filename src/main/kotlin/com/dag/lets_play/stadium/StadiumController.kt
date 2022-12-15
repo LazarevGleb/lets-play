@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.RequestMapping
 interface StadiumController {
 
     @PostMapping("/")
-    fun getStadiums(@RequestBody request: GetStadiumRequest): ResponseEntity<Set<Stadium>>
+    fun getStadiums(@RequestBody request: GetStadiumRequest): ResponseEntity<List<Stadium>>
 }

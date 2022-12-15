@@ -1,10 +1,36 @@
+version: '3.9'
+volumes:
+  dbbackups:
+  postgis-data:
+
 services:
-  postgres:
-    image: postgres:12.2
-    container_name: postgresql
+  db:
+    image: kartoza/postgis:14-3.3
+    volumes:
+      - postgis-data:/var/lib/postgresql
+      - dbbackups:/backups
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: lets_play
     ports:
       - '5432:5432'
+    restart: always
+    healthcheck:
+      test: "PGPASSWORD=postgres pg_isready -h 127.0.0.1 -U docker -d lets_play"
+
+  dbbackups:
+    image: kartoza/pg-backup:14-3.3
+    hostname: pg-backups
+    volumes:
+      - dbbackups:/backups
+    environment:
+      - DUMPPREFIX=PG_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASS=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_HOST=db
+    restart: on-failure
+    depends_on:
+      db:
+        condition: service_healthy

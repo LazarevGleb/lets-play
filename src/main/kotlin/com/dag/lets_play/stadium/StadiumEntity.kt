@@ -2,6 +2,8 @@ package com.dag.lets_play.stadium
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.hibernate.annotations.JdbcTypeCode
@@ -13,7 +15,7 @@ import org.locationtech.jts.geom.Point
 open class StadiumEntity {
 
     @Id
-    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     open var id: Long? = null
 
     @Column(nullable = false)

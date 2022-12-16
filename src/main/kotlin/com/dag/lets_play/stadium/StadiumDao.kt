@@ -13,6 +13,10 @@ class StadiumDao(private val repository: StadiumRepository) {
         return repository.findStadiumsWithinDistance(point, distance)
     }
 
+    fun save(entity: StadiumEntity): StadiumEntity {
+        return repository.save(entity)
+    }
+
     companion object {
         private const val SRID = 4326
         private val geometryFactory = GeometryFactory(PrecisionModel(), SRID)

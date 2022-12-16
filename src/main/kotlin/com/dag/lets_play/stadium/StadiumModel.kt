@@ -14,16 +14,16 @@ data class Stadium(
     val data: Map<String, Any>?
 )
 
-enum class Capacity(@JsonValue private val desc: String) {
+enum class Capacity(@get:JsonValue val value: String) {
     FIVE("5x5"),
     SEVEN("7x7"),
     ELEVEN("11x11"),
     ;
 
     companion object {
-        fun ofDescription(desc: String): Capacity {
-            return Capacity.values().find { it.desc == desc }
-                ?: throw IllegalArgumentException("Unknown Capacity description: $desc")
+        fun of(value: String): Capacity {
+            return Capacity.values().find { it.value == value }
+                ?: throw IllegalArgumentException("Unknown Capacity description: $value")
         }
     }
 }

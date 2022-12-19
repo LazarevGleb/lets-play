@@ -1,5 +1,6 @@
 package com.dag.lets_play.stadium
 
+import jakarta.transaction.Transactional
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
@@ -13,11 +14,32 @@ class StadiumService(
         return stadiumEntities.map { mapper.toStadium(it) }
     }
 
+    @Transactional
     fun create(stadium: Stadium): Stadium {
         val entity = mapper.toEntity(stadium)
-        val savedEntity = dao.save(entity)
+        val savedEntity = dao.create(entity)
         logger.info("Saved stadium: $savedEntity")
-        return mapper.toStadium(entity)
+        return mapper.toStadium(savedEntity)
+    }
+
+    @Transactional
+    fun update(stadium: Stadium): Int {
+        val entity = mapper.toEntity(stadium)
+        val rowsUpdated = dao.update(entity)
+        if (rowsUpdated > 0) {
+            logger.info("Updated stadium: $stadium")
+        }
+        return rowsUpdated
+    }
+
+    @Transactional
+    fun deleteByLocation(location: Location): Int {
+        val point = mapper.locationToPoint(location)
+        val rowsDeleted = dao.deleteByPoint(point)
+        if (rowsDeleted > 0) {
+            logger.info("Removed stadium in location: $location")
+        }
+        return rowsDeleted
     }
 
     companion object {

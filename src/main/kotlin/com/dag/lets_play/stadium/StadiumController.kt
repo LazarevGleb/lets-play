@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping
 @RequestMapping("/api/stadiums")
 interface StadiumController {
 
+    @PostMapping("/findNearest")
+    fun getStadiums(@RequestBody request: GetStadiumRequest): ResponseEntity<List<Stadium>>
+    
     @PostMapping("/")
-    fun getStadiums(@RequestBody request: GetStadiumRequest): ResponseEntity<Set<Stadium>>
+    fun createStadium(@RequestBody request: Stadium): ResponseEntity<Stadium>
 }

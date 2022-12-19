@@ -10,7 +10,7 @@ spring:
     hibernate:
       ddl-auto: validate
   liquibase:
-    enabled: false
+    enabled: true
     change-log: classpath:liquibase/changelog.yaml
 server:
-  port: 8081 
+  port: 8082

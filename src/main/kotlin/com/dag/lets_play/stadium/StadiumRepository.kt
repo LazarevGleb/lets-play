@@ -12,7 +12,7 @@ interface StadiumRepository : JpaRepository<StadiumEntity, Long> {
     @Query(
         value = """
             SELECT * FROM stadium
-            WHERE ST_DistanceSphere(location, :point) < :distance
+            WHERE ST_DistanceSphere(location, :point) <= :distance
             """,
         nativeQuery = true
     )

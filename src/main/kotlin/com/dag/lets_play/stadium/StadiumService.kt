@@ -10,7 +10,8 @@ class StadiumService(
     private val mapper: StadiumMapper
 ) {
     fun getStadiums(request: GetStadiumRequest): List<Stadium> {
-        val stadiumEntities = dao.getStadiumsWithinDistance(request.location, request.distance)
+        val point = mapper.locationToPoint(request.location)
+        val stadiumEntities = dao.getStadiumsWithinDistance(point, request.distance)
         return stadiumEntities.map { mapper.toStadium(it) }
     }
 

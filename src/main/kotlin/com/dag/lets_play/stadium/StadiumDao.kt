@@ -1,17 +1,12 @@
 package com.dag.lets_play.stadium
 
-import org.locationtech.jts.geom.Coordinate
-import org.locationtech.jts.geom.GeometryFactory
 import org.locationtech.jts.geom.Point
-import org.locationtech.jts.geom.PrecisionModel
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Repository
 
 @Repository
 class StadiumDao(private val repository: StadiumRepository) {
-    fun getStadiumsWithinDistance(location: Location, distance: Double): List<StadiumEntity> {
-        val coordinate = Coordinate(location.longitude, location.latitude)
-        val point = geometryFactory.createPoint(coordinate)
+    fun getStadiumsWithinDistance(point: Point, distance: Double): List<StadiumEntity> {
         return repository.findStadiumsWithinDistance(point, distance)
     }
 
@@ -43,8 +38,6 @@ class StadiumDao(private val repository: StadiumRepository) {
     }
 
     companion object {
-        private const val SRID = 4326
-        private val geometryFactory = GeometryFactory(PrecisionModel(), SRID)
         private val logger = LoggerFactory.getLogger(StadiumDao::class.java)
     }
 }

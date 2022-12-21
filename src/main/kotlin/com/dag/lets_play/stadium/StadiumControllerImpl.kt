@@ -16,4 +16,20 @@ class StadiumControllerImpl(private val service: StadiumService) : StadiumContro
             .status(HttpStatus.CREATED)
             .body(service.create(request))
     }
+
+    override fun updateStadium(request: Stadium): ResponseEntity<Stadium> {
+        val updated = service.update(request)
+        if (updated > 0) {
+            return ResponseEntity.ok().build()
+        }
+        return ResponseEntity.notFound().build()
+    }
+
+    override fun deleteStadium(request: DeleteStadiumRequest): ResponseEntity<Unit> {
+        val removed = service.deleteByLocation(request.location)
+        if (removed > 0) {
+            return ResponseEntity.noContent().build()
+        }
+        return ResponseEntity.notFound().build()
+    }
 }

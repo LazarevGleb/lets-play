@@ -1,24 +1,14 @@
-DROP DOMAIN IF EXISTS phone;
-CREATE DOMAIN phone AS TEXT CHECK (VALUE ~* '^\+?7(9\d{9})$');
-
-CREATE TABLE IF NOT EXISTS player
+CREATE TABLE IF NOT EXISTS position
 (
     id                  SERIAL           NOT NULL PRIMARY KEY,
-    phone               phone            NOT NULL UNIQUE,
-    name                TEXT             NOT NULL,
-    nickname            TEXT             NOT NULL UNIQUE,
-    age                 SMALLINT         NOT NULL,
-    birth_date          DATE             NOT NULL,
-    rank                FLOAT            ,
-    primary_position    SMALLINT         NOT NULL,
-    secondary_position  SMALLINT         ,
-    avatar              TEXT             UNIQUE,
-
-    CONSTRAINT pk_primary_position FOREIGN KEY(primary_position) REFERENCES position(id),
-    CONSTRAINT pk_secondary_position FOREIGN KEY(secondary_position) REFERENCES position(id)
+    title               TEXT             UNIQUE NOT NULL,
+    description         TEXT             NOT NULL
 );
 
-INSERT INTO player(phone, name, nickname, age, birth_date, rank, primary_position)
-VALUES (
-'+79522760148', 'Антон', 'AntonGongelev', '29', '1993-09-25', '4.5', '1'
-);
+INSERT INTO position(title, description)
+VALUES
+('Нападающий', 'Атакующий игрок, располагающийся ближе всех к воротам соперника. Основной целью нападающих является забивание голов'),
+('Полузащитник', 'Игрок футбольной команды, действующий между защитой и нападением. Основной задачей полузащитников является помощь игрокам обороны и нападения, в зависимости от игровой ситуации'),
+('Защитник', 'Игрок, специализирующийся на выполнении оборонительных функций. Его основная цель — не давать нападающим противника возможности забить гол, обработать мяч, подойти к воротам, ударить по воротам'),
+('Вратарь', 'Игрок, защищающий ворота. Основная цель — не давать игрокам команды-соперника забить гол')
+

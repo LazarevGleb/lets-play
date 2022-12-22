@@ -2,7 +2,7 @@ spring:
   application:
     name: "let's play" 
   datasource:
-    url: jdbc:postgresql://localhost:5432/lets_play
+    url: jdbc:postgresql://192.168.99.102:5432/lets_play
     username: postgres
     password: postgres
   jpa:
@@ -12,5 +12,8 @@ spring:
   liquibase:
     enabled: true
     change-log: classpath:liquibase/changelog.yaml
+  jackson:
+    deserialization:
+      fail_on_unknown_properties: true
 server:
   port: 8082

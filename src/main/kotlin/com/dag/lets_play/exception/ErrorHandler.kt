@@ -13,7 +13,8 @@ class ErrorHandler {
     @ExceptionHandler(value = [Exception::class])
     fun handleException(e: Exception, request: HttpServletRequest): ResponseEntity<Any> {
         logger.error("Error in endpoint=${request.requestURI}. $e")
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body("Упс, что-то пошло не по плану:${System.lineSeparator()}'${e.message}'")
     }
 
     companion object {

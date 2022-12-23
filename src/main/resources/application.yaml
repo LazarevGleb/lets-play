@@ -2,13 +2,14 @@ spring:
   application:
     name: "let's play" 
   datasource:
-    url: jdbc:postgresql://${DB_SERVER}/lets_play
+    url: jdbc:postgresql://${DB_SERVER:localhost:5432}/lets_play
     username: postgres
     password: postgres
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: validate
+    open-in-view: false
   liquibase:
     enabled: true
     change-log: classpath:liquibase/changelog.yaml

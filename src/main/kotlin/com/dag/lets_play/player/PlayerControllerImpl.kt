@@ -13,15 +13,9 @@ class PlayerControllerImpl(private val service: PlayerService) : PlayerControlle
             .body(service.create(request))
     }
 
-    override fun getPlayer(phone: String): ResponseEntity<Player> {
+    override fun getPlayerByPhone(phone: String): ResponseEntity<Player> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(service.getPlayerByPhone(phone))
-    }
-
-    override fun getPlayers(): ResponseEntity<List<Player>> {
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(service.getAllPlayers())
     }
 }

@@ -10,10 +10,6 @@ class PlayerDao(private val repository: PlayerRepository) {
         return repository.findByPhone(phone)
     }
 
-    fun getAllPlayers(): List<PlayerEntity> {
-        return repository.findAll()
-    }
-
     fun save(entity: PlayerEntity): PlayerEntity {
         return repository.save(entity)
     }

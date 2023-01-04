@@ -1,5 +1,6 @@
 package com.dag.lets_play.player
 
+import com.dag.lets_play.exception.PlayerNotFoundException
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
@@ -11,11 +12,10 @@ class PlayerService(
 
     fun getPlayerByPhone(phone: String): Player {
         val player = dao.getPlayerByPhone(phone)
+        if (!player.isPresent) {
+            throw PlayerNotFoundException("Can't find player by phone: $phone")
+        }
         return mapper.toPlayer(player.get())
-    }
-
-    fun getAllPlayers(): List<Player> {
-        return dao.getAllPlayers().stream().map { mapper.toPlayer(it) }.toList()
     }
 
     fun create(player: Player): Player {

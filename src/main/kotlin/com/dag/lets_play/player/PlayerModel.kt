@@ -1,7 +1,7 @@
 package com.dag.lets_play.player
 
 import com.dag.lets_play.position.Position
-import java.util.*
+import java.util.Date
 
 data class Player(
     val name: String,

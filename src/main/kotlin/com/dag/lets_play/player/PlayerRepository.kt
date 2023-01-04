@@ -3,7 +3,7 @@ package com.dag.lets_play.player
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
-import java.util.*
+import java.util.Optional
 
 @Repository
 interface PlayerRepository : JpaRepository<PlayerEntity, Long> {

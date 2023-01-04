@@ -1,24 +1,23 @@
 package com.dag.lets_play.player
 
 import com.dag.lets_play.image.ImageProcessor
-import com.dag.lets_play.position.PositionMapper
 import org.springframework.stereotype.Component
 
 @Component
 class PlayerMapper(
-    private val positionMapper: PositionMapper,
     private val imageProcessor: ImageProcessor
 ) {
 
     fun toPlayer(entity: PlayerEntity) = Player(
+        id = entity.id!!,
         phone = entity.phone!!,
         name = entity.name!!,
         nickname = entity.nickname!!,
         age = entity.age!!,
         birthDate = entity.birthDate!!,
         rank = entity.rank,
-        primaryPosition = positionMapper.toPosition(entity.primaryPosition!!),
-        secondaryPosition = entity.secondaryPosition?.let { positionMapper.toPosition(it) },
+        primaryPosition = entity.primaryPosition!!,
+        secondaryPosition = entity.secondaryPosition,
         avatar = entity.avatar?.let { imageProcessor.loadImage(it) }
     )
 
@@ -30,8 +29,8 @@ class PlayerMapper(
             age = player.age
             birthDate = player.birthDate
             rank = player.rank
-            primaryPosition = positionMapper.toPosition(player.primaryPosition)
-            secondaryPosition = player.secondaryPosition?.let { positionMapper.toPosition(it) }
+            primaryPosition = player.primaryPosition
+            secondaryPosition = player.secondaryPosition
             avatar = player.avatar?.let { imageProcessor.saveImage(it) }
         }
     }

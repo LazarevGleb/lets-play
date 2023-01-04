@@ -1,7 +1,7 @@
 package com.dag.lets_play.player
 
 import org.springframework.stereotype.Repository
-import java.util.*
+import java.util.Optional
 
 @Repository
 class PlayerDao(private val repository: PlayerRepository) {

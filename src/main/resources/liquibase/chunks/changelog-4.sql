@@ -1,5 +1,5 @@
 DROP DOMAIN IF EXISTS phone;
-CREATE DOMAIN phone AS TEXT CHECK (VALUE ~* '^\+?7(9\d{9})$');
+CREATE DOMAIN phone AS TEXT CHECK (VALUE ~* '^\+7(9\d{9})$');
 
 CREATE TABLE IF NOT EXISTS player
 (

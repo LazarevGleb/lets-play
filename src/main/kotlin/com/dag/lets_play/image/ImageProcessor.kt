@@ -25,14 +25,14 @@ class ImageProcessor {
                 output.write(buffer, 0, bytesRead)
             }
         } catch (e: IOException) {
-            logger.error(e.message, e)
+            logger.error("Error during image '$path' loading: ${e.message}", e)
         }
 
         return encoder.encodeToString(output.toByteArray())
     }
 
     fun saveImage(base64Image: String): String {
-        val data: ByteArray = base64Image.toByteArray()
+        val data = base64Image.toByteArray()
         val imageName = UUID.randomUUID().toString()
         FileOutputStream(imageName).use { it.write(data) }
         return imageName;

@@ -14,4 +14,4 @@ spring:
     enabled: true
     change-log: classpath:liquibase/changelog.yaml
 server:
-  port: 8082
+  port: 8080

@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS position
 (
-    id                  SERIAL           NOT NULL PRIMARY KEY,
+    id                  SMALLSERIAL      NOT NULL PRIMARY KEY,
     title               TEXT             UNIQUE NOT NULL,
     description         TEXT             NOT NULL
 );

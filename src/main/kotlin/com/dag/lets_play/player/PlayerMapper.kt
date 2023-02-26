@@ -2,6 +2,9 @@ package com.dag.lets_play.player
 
 import com.dag.lets_play.image.ImageProcessor
 import org.springframework.stereotype.Component
+import java.time.LocalDate
+import java.time.Period
+import java.time.ZoneId
 
 @Component
 class PlayerMapper(
@@ -13,7 +16,7 @@ class PlayerMapper(
         phone = entity.phone!!,
         name = entity.name!!,
         nickname = entity.nickname!!,
-        age = entity.age!!,
+        age = Period.between(entity.birthDate!!.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), LocalDate.now()).years,
         birthDate = entity.birthDate!!,
         rank = entity.rank,
         primaryPosition = entity.primaryPosition!!,
@@ -26,7 +29,6 @@ class PlayerMapper(
             name = player.name
             phone = player.phone
             nickname = player.nickname
-            age = player.age
             birthDate = player.birthDate
             rank = player.rank
             primaryPosition = player.primaryPosition

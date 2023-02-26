@@ -25,9 +25,6 @@ open class PlayerEntity {
     @Column(nullable = false, unique = true)
     open var nickname: String? = null
 
-    @Column(nullable = false)
-    open var age: Int? = null
-
     @Column(name = "birth_date", nullable = false, columnDefinition = "date")
     open var birthDate: Date? = null
 

@@ -17,7 +17,7 @@ services:
       - '5432:5432'
     restart: always
     healthcheck:
-      test: "PGPASSWORD=postgres pg_isready -h 127.0.0.1 -U docker -d lets_play"
+      test: "PGPASSWORD=postgres pg_isready -h 127.0.0.1 -U postgres -d lets_play"
 
   dbbackups:
     image: kartoza/pg-backup:14-3.3

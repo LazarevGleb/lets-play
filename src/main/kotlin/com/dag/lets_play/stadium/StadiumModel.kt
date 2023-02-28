@@ -1,8 +1,11 @@
 package com.dag.lets_play.stadium
 
 import com.fasterxml.jackson.annotation.JsonValue
+import java.time.LocalDateTime
 
 data class GetStadiumRequest(val location: Location, val distance: Double)
+
+data class DeleteStadiumRequest(val location: Location)
 
 data class Location(val latitude: Double, val longitude: Double)
 
@@ -11,7 +14,9 @@ data class Stadium(
     val location: Location,
     val capacity: Capacity,
     val description: String?,
-    val data: Map<String, Any>?
+    val data: Map<String, Any>?,
+    val createdAt: LocalDateTime?,
+    val removedAt: LocalDateTime?
 )
 
 enum class Capacity(@get:JsonValue val value: String) {

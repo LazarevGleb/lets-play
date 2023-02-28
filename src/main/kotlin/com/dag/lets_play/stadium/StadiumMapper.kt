@@ -2,6 +2,7 @@ package com.dag.lets_play.stadium
 
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
+import org.locationtech.jts.geom.Point
 import org.locationtech.jts.geom.PrecisionModel
 import org.springframework.stereotype.Component
 
@@ -9,10 +10,12 @@ import org.springframework.stereotype.Component
 class StadiumMapper {
     fun toStadium(entity: StadiumEntity) = Stadium(
         address = entity.address!!,
-        location = Location(entity.location!!.x, entity.location!!.y),
+        location = Location(entity.location!!.y, entity.location!!.x),
         capacity = Capacity.of(entity.capacity!!),
         description = entity.description,
-        data = entity.data
+        data = entity.data,
+        createdAt = entity.createdAt,
+        removedAt = entity.removedAt
     )
 
     fun toEntity(stadium: Stadium): StadiumEntity {
@@ -25,7 +28,14 @@ class StadiumMapper {
             capacity = stadium.capacity.value
             description = stadium.description
             data = stadium.data
+            createdAt = stadium.createdAt
+            removedAt = stadium.removedAt
         }
+    }
+
+    fun locationToPoint(location: Location): Point {
+        val coordinate = Coordinate(location.longitude, location.latitude)
+        return geometryFactory.createPoint(coordinate)
     }
 
     companion object {

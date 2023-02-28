@@ -27,7 +27,7 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
     implementation 'org.liquibase:liquibase-core'
     runtimeOnly 'org.postgresql:postgresql'
-    implementation 'org.hibernate:hibernate-spatial:6.1.5.Final'
+    implementation 'org.hibernate:hibernate-spatial:6.1.6.Final'
 }
 
 tasks.withType(KotlinCompile).configureEach {

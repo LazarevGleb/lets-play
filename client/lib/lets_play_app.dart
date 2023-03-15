@@ -5,37 +5,68 @@ import 'package:http/http.dart' as http;
 
 import 'colors.dart';
 
-class LetsPlayApp extends StatelessWidget {
+class LetsPlayApp extends StatefulWidget {
   const LetsPlayApp({Key? key}) : super(key: key);
 
   @override
+  State<StatefulWidget> createState() {
+    return LetsPlayState();
+  }
+}
+
+class LetsPlayState extends State<LetsPlayApp> {
+  static const playersNavItem = BottomNavigationBarItem(
+      label: "Игроки",
+      icon: Icon(Icons.accessibility_sharp, color: navBarColor));
+
+  static const settingsNavItem = BottomNavigationBarItem(
+      label: "Стадионы",
+      icon: Icon(Icons.account_tree_outlined, color: navBarColor));
+
+  // var playersButton = ElevatedButton(
+  //   style: ButtonStyle(
+  //     backgroundColor: MaterialStateColor.resolveWith((states) => navBarColor),
+  //   ),
+  //   onPressed: () {
+  //     reloadPlayers();
+  //   },
+  //   child: Text("Получить игроков"),
+  // );
+
+  var navIndex = 0;
+  List<Player> players = [];
+
+  @override
   Widget build(BuildContext context) {
-    const playersNavItem = BottomNavigationBarItem(
-        label: "Игроки",
-        icon: Icon(Icons.accessibility_sharp, color: navBarColor));
-
-    const settingsNavItem = BottomNavigationBarItem(
-        label: "Стадионы",
-        icon: Icon(Icons.account_tree_outlined, color: navBarColor));
-
     var playersButton = ElevatedButton(
       style: ButtonStyle(
         backgroundColor:
             MaterialStateColor.resolveWith((states) => navBarColor),
       ),
       onPressed: () {
-        getPlayers();
+        setState(() {
+          reloadPlayers().then((value) => players = value);
+        });
       },
       child: Text("Получить игроков"),
     );
 
-    var navIndex = 0;
 
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           body: Center(
-            child: playersButton,
+            child: Stack(
+              children: [
+                Align(
+                    alignment: AlignmentDirectional.center,
+                    child: Text(getPlayersReport())),
+                Align(
+                  alignment: AlignmentDirectional.bottomCenter,
+                  child: playersButton,
+                ),
+              ],
+            ),
           ),
           bottomNavigationBar: BottomNavigationBar(
             items: const [
@@ -45,30 +76,41 @@ class LetsPlayApp extends StatelessWidget {
             currentIndex: navIndex,
             selectedItemColor: navBarColor,
             onTap: (index) {
-              navIndex = index;
+              setState(() {
+                navIndex = index;
+              });
             },
           ),
         ));
   }
 
-  Future<List<Player>> getPlayers() async {
-    try {
-      final response =
-          await http.get(Uri.parse('http://172.29.18.112:8082/api/players/'));
-      if (response.statusCode == 200) {
-        List<Player> players = [];
-        List<dynamic> json = jsonDecode(response.body) as List;
-        for (var element in json) {
-          var player = Player.fromJson(element);
-          players.add(player);
-        }
-        return players;
+  String getPlayersReport() {
+    String result = "Игроки: ";
+    players.forEach((p) { result += p.name + " ";});
+    return result;
+  }
+}
+
+Future<List<Player>> reloadPlayers() async {
+  try {
+    final response = await http.get(
+        Uri.parse('http://172.29.18.112:8082/api/players/'),
+        headers: {'Content-Type': 'application/json; charset=UTF-8'});
+    if (response.statusCode == 200) {
+      List<Player> players = [];
+      List<dynamic> json = jsonDecode(utf8.decode(response.bodyBytes)) as List;
+      print(response.body);
+      for (var element in json) {
+        var player = Player.fromJson(element);
+        players.add(player);
       }
-      throw Exception("Something is wrong");
-    } catch (e) {
-      print(e);
-      return Future(() => Future(() => []));
+      print(players);
+      return players;
     }
+    throw Exception("Something is wrong");
+  } catch (e) {
+    print(e);
+    return Future(() => Future(() => []));
   }
 }
 

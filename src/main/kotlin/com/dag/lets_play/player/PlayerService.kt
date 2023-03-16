@@ -18,6 +18,11 @@ class PlayerService(
         return mapper.toPlayer(player.get())
     }
 
+    fun getPlayers(): List<Player> {
+        val players = dao.getPlayers()
+        return players.map { mapper.toPlayer(it) }
+    }
+
     fun create(player: Player): Player {
         val entity = mapper.toEntity(player)
         val savedEntity = dao.save(entity)

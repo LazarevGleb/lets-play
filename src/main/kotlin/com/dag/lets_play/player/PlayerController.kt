@@ -15,4 +15,7 @@ interface PlayerController {
 
     @GetMapping("/{phone}")
     fun getPlayerByPhone(@PathVariable phone: String): ResponseEntity<Player>
+
+    @GetMapping("/")
+    fun getPlayers(): ResponseEntity<List<Player>>
 }

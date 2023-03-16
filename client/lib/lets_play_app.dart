@@ -44,13 +44,12 @@ class LetsPlayState extends State<LetsPlayApp> {
             MaterialStateColor.resolveWith((states) => navBarColor),
       ),
       onPressed: () {
-        setState(() {
-          reloadPlayers().then((value) => players = value);
-        });
+        reloadPlayers().then((value) => setState(() {
+              players = value;
+            }));
       },
       child: Text("Получить игроков"),
     );
-
 
     return MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -86,7 +85,9 @@ class LetsPlayState extends State<LetsPlayApp> {
 
   String getPlayersReport() {
     String result = "Игроки: ";
-    players.forEach((p) { result += p.name + " ";});
+    players.forEach((p) {
+      result += p.name + " ";
+    });
     return result;
   }
 }

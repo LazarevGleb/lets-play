@@ -23,16 +23,6 @@ class LetsPlayState extends State<LetsPlayApp> {
       label: "Стадионы",
       icon: Icon(Icons.account_tree_outlined, color: navBarColor));
 
-  // var playersButton = ElevatedButton(
-  //   style: ButtonStyle(
-  //     backgroundColor: MaterialStateColor.resolveWith((states) => navBarColor),
-  //   ),
-  //   onPressed: () {
-  //     reloadPlayers();
-  //   },
-  //   child: Text("Получить игроков"),
-  // );
-
   var navIndex = 0;
   List<Player> players = [];
 
@@ -53,6 +43,13 @@ class LetsPlayState extends State<LetsPlayApp> {
 
     return MaterialApp(
         debugShowCheckedModeBanner: false,
+        theme: ThemeData(fontFamily: 'LetsPlayFont2',
+          textTheme: const TextTheme(
+            displayLarge: TextStyle(fontSize: 72.0),
+            titleLarge: TextStyle(fontSize: 40.0),
+            bodyMedium: TextStyle(fontSize: 30.0),
+            labelSmall: TextStyle(fontSize: 25.0)
+          ),),
         home: Scaffold(
           body: Center(
             child: Stack(

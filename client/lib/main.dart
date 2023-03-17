@@ -1,7 +1,17 @@
+import 'package:client/navigation.dart';
 import 'package:flutter/material.dart';
 
-import 'lets_play_app.dart';
+import 'map_page.dart';
+import 'menu_page.dart';
 
-void main() {
-  runApp(const LetsPlayApp());
-}
+void main() => runApp(MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: 'LetsPlayFont2',
+      ),
+      initialRoute: LetsPlayNavigation.mapRoute,
+      routes: {
+        LetsPlayNavigation.mapRoute: (context) => MapPage(),
+        LetsPlayNavigation.menuRoute: (context) => MenuPage(),
+      },
+    ));

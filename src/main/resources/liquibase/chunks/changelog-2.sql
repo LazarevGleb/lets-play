@@ -1,5 +1,22 @@
-ALTER TABLE stadium
-    ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL default now();
+CREATE TABLE IF NOT EXISTS player
+(
+    id                 SERIAL NOT NULL,
+    phone              TEXT   NOT NULL,
+    name               TEXT   NOT NULL,
+    nickname           TEXT   NOT NULL,
+    birth_date         DATE   NOT NULL,
+    rank               FLOAT,
+    primary_position   TEXT   NOT NULL,
+    secondary_position TEXT,
+    avatar             TEXT,
 
-ALTER TABLE stadium
-    ADD COLUMN IF NOT EXISTS removed_at TIMESTAMPTZ;
+    CONSTRAINT pk_player_id PRIMARY KEY (id),
+    CONSTRAINT uk_player_phone UNIQUE (phone),
+    CONSTRAINT uk_player_nickname UNIQUE (nickname)
+);
+
+CREATE INDEX idx_player ON player (phone);
+
+INSERT INTO player(phone, name, nickname, birth_date, rank, primary_position, secondary_position, avatar)
+VALUES ('+79522760148', 'Антон', 'AntonGongelev', '1993-09-25', 4.5, 'FORWARD', 'HALFBACK', null),
+       ('+79697326169', 'Глеб', 'LazarevGB', '1993-12-06', 4.5, 'HALFBACK', 'GOALKEEPER', null);

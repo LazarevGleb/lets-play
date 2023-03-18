@@ -16,9 +16,9 @@ class LetsPlayNavigation {
     return BottomNavigationBar(
       items: const [
         BottomNavigationBarItem(
-            label: "Карта", icon: Icon(Icons.accessibility_sharp)),
+            label: "Карта", icon: Icon(Icons.layers_rounded)),
         BottomNavigationBarItem(
-            label: "Меню", icon: Icon(Icons.account_tree_outlined)),
+            label: "Меню", icon: Icon(Icons.menu_rounded)),
       ],
       currentIndex: navIndex,
       selectedItemColor: Colors.blueGrey,

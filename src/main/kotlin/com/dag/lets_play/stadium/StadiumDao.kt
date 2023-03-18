@@ -3,6 +3,7 @@ package com.dag.lets_play.stadium
 import org.locationtech.jts.geom.Point
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Repository
+import java.time.LocalDateTime
 
 @Repository
 class StadiumDao(private val repository: StadiumRepository) {
@@ -12,6 +13,7 @@ class StadiumDao(private val repository: StadiumRepository) {
 
     fun create(entity: StadiumEntity): StadiumEntity {
         try {
+            entity.createdAt = LocalDateTime.now()
             return repository.save(entity)
         } catch (e: Exception) {
             logger.error("Cannot save stadium=$entity due to error. ", e)

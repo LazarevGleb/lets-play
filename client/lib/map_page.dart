@@ -22,7 +22,7 @@ class _MapPageState extends State<MapPage> {
               child: FlutterMap(
                 options: MapOptions(
                   center: LatLng(59.99137233759155, 30.309658542579047),
-                  zoom: 12,
+                  zoom: 14,
                     minZoom: 10,
                     maxZoom: 18,
                   interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate

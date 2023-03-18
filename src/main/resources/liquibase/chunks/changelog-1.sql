@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS stadium
     id          SERIAL          NOT NULL,
     address     TEXT            NOT NULL,
     location    GEOMETRY(Point) NOT NULL,
-    capacity    TEXT            NOT NULL,
+    capacity    TEXT,
     description TEXT,
     data        JSONB,
     created_at  TIMESTAMPTZ     NOT NULL,

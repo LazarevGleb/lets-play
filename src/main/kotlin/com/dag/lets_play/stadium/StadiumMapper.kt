@@ -1,5 +1,6 @@
 package com.dag.lets_play.stadium
 
+import com.dag.lets_play.csv.CsvStadium
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import org.locationtech.jts.geom.Point
@@ -36,6 +37,17 @@ class StadiumMapper {
     fun locationToPoint(location: Location): Point {
         val coordinate = Coordinate(location.longitude, location.latitude)
         return geometryFactory.createPoint(coordinate)
+    }
+
+    fun toEntity(stadium: CsvStadium): StadiumEntity {
+        val coordinate = Coordinate(stadium.longitude, stadium.latitude)
+        val point = geometryFactory.createPoint(coordinate)
+
+        return StadiumEntity().apply {
+            address = stadium.address
+            location = point
+            capacity = stadium.capacity
+        }
     }
 
     companion object {

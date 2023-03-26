@@ -10,13 +10,20 @@ data class DeleteStadiumRequest(val location: Location)
 data class Location(val latitude: Double, val longitude: Double)
 
 data class Stadium(
+    val id: Long,
     val address: String,
     val location: Location,
     val capacity: Capacity,
+    val avatar: String?,
     val description: String?,
     val data: Map<String, Any>?,
     val createdAt: LocalDateTime?,
     val removedAt: LocalDateTime?
+)
+
+data class StadiumPreview(
+    val id: Long, 
+    val location: Location
 )
 
 enum class Capacity(@get:JsonValue val value: String) {

@@ -1,11 +1,10 @@
 package com.dag.lets_play.stadium
 
+import com.dag.lets_play.utils.BaseEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
 import jakarta.persistence.Table
+import org.geolatte.geom.Position
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
 import org.locationtech.jts.geom.Point
@@ -13,11 +12,7 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "stadium")
-open class StadiumEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    open var id: Long? = null
+open class StadiumEntity : BaseEntity() {
 
     @Column(nullable = false)
     open var address: String? = null
@@ -31,6 +26,8 @@ open class StadiumEntity {
 
     open var description: String? = null
 
+    open var avatar: String? = null
+
     @JdbcTypeCode(SqlTypes.JSON)
     open var data: Map<String, Any>? = null
 
@@ -39,4 +36,9 @@ open class StadiumEntity {
 
     @Column(name = "removed_at")
     open var removedAt: LocalDateTime? = null
+}
+
+interface IStadiumIdLocation {
+    val id: Long?
+    val location: org.geolatte.geom.Point<Position>
 }

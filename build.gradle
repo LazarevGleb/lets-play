@@ -18,17 +18,29 @@ repositories {
 }
 
 dependencies {
+    // spring boot
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+    
+    // kotlin
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-    implementation 'org.liquibase:liquibase-core'
+    
+    // db
     runtimeOnly 'org.postgresql:postgresql'
+    implementation 'org.liquibase:liquibase-core'
     implementation 'org.hibernate:hibernate-spatial:6.1.6.Final'
+    
+    // utils
     implementation 'com.opencsv:opencsv:5.7.1'
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.1'
+
+    // swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+    compileOnly 'javax.servlet:javax.servlet-api:3.1.0'
 }
 
 tasks.withType(KotlinCompile).configureEach {
@@ -36,4 +48,8 @@ tasks.withType(KotlinCompile).configureEach {
         freeCompilerArgs = ['-Xjsr305=strict']
         jvmTarget = '17'
     }
+}
+
+springBoot {
+    buildInfo()
 }

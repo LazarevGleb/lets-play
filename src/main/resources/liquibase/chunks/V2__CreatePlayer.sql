@@ -1,12 +1,12 @@
 CREATE TABLE IF NOT EXISTS player
 (
-    id                 SERIAL NOT NULL,
-    phone              TEXT   NOT NULL,
-    name               TEXT   NOT NULL,
-    nickname           TEXT   NOT NULL,
-    birth_date         DATE   NOT NULL,
-    rank               FLOAT,
-    primary_position   TEXT   NOT NULL,
+    id                 BIGSERIAL NOT NULL,
+    phone              TEXT      NOT NULL,
+    name               TEXT      NOT NULL,
+    nickname           TEXT      NOT NULL,
+    birth_date         DATE      NOT NULL,
+    rank               REAL,
+    primary_position   TEXT      NOT NULL,
     secondary_position TEXT,
     avatar             TEXT,
 

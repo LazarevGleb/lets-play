@@ -1,20 +1,14 @@
 package com.dag.lets_play.player
 
+import com.dag.lets_play.utils.BaseEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
 import jakarta.persistence.Table
 import java.util.Date
 
 @Entity
 @Table(name = "player")
-open class PlayerEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    open var id: Long? = null
+open class PlayerEntity : BaseEntity() {
 
     @Column(nullable = false)
     open var name: String? = null
@@ -29,7 +23,7 @@ open class PlayerEntity {
     open var birthDate: Date? = null
 
     @Column
-    open var rank: Float? = null
+    open var rank: Double? = null
 
     @Column(name = "primary_position", nullable = false)
     open var primaryPosition: String? = null

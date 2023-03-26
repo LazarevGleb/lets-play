@@ -19,8 +19,8 @@ class PlayerMapper(
         age = Period.between(entity.birthDate!!.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), LocalDate.now()).years,
         birthDate = entity.birthDate!!,
         rank = entity.rank,
-        primaryPosition = entity.primaryPosition!!,
-        secondaryPosition = entity.secondaryPosition,
+        primaryPosition = Position.valueOf(entity.primaryPosition!!),
+        secondaryPosition = entity.secondaryPosition?.let { Position.valueOf(it) },
         avatar = entity.avatar?.let { imageProcessor.loadImage(it) }
     )
 
@@ -31,8 +31,8 @@ class PlayerMapper(
             nickname = player.nickname
             birthDate = player.birthDate
             rank = player.rank
-            primaryPosition = player.primaryPosition
-            secondaryPosition = player.secondaryPosition
+            primaryPosition = player.primaryPosition.name
+            secondaryPosition = player.secondaryPosition?.name
             avatar = player.avatar?.let { imageProcessor.saveImage(it) }
         }
     }

@@ -26,7 +26,7 @@ open class StadiumEntity {
     @JdbcTypeCode(SqlTypes.GEOMETRY)
     open var location: Point? = null
 
-    @Column(nullable = false)
+    @Column
     open var capacity: String? = null
 
     open var description: String? = null

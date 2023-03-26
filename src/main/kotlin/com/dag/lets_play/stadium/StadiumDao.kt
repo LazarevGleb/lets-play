@@ -21,6 +21,16 @@ class StadiumDao(private val repository: StadiumRepository) {
         }
     }
 
+    fun create(stadiums: List<StadiumEntity>) {
+        try {
+            stadiums.map { it.createdAt = LocalDateTime.now() }
+            repository.saveAll(stadiums)
+        } catch (e: Exception) {
+            logger.error("Error during saving batch of stadiums. ", e)
+            throw e
+        }
+    }
+
     fun update(entity: StadiumEntity): Int {
         try {
             return repository.update(entity.address, entity.location, entity.capacity, entity.description, entity.data)

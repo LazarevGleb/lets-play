@@ -23,37 +23,15 @@ class _MapPageState extends State<MapPage> {
     areaLimit: const BoundingBox.world(),
   );
 
-  // await mapController.addMarker(home,
-  // markerIcon: MarkerIcon(
-  // iconWidget: MarkerWithTooltip(
-  // tooltip: '',
-  // onTap: () => print("sf"),
-  // child: const Icon(CupertinoIcons.location_solid),
-  // )));
-
-  // List<Marker> markers = [];
-  //
   void loadMarkers() {
     client.getStadiums().forEach((point) {
       mapController.addMarker(point,
-          markerIcon: MarkerIcon(
-              iconWidget: InkWell(
-                  onTap: () => onTap(point),
-                  child: const IgnorePointer(
-                    child: Icon(
-                      CupertinoIcons.location_solid,
-                      size: 100,
-                    ),
-                  ))));
-
-      // result.add(Marker(
-      //     point: point,
-      //     anchorPos: AnchorPos.align(AnchorAlign.center),
-      //     builder: (ctx) =>
-      //         MarkerWithTooltip(
-      //           tooltip: "the tooltip text", onTap: () => print("sfdasdfasdf"),
-      //           child: const Icon(CupertinoIcons.location_solid),
-      //         )));
+          markerIcon: const MarkerIcon(
+            iconWidget: Icon(
+              CupertinoIcons.location_solid,
+              size: 100,
+            ),
+          ));
     });
   }
 
@@ -78,6 +56,7 @@ class _MapPageState extends State<MapPage> {
           children: [
             Flexible(
               child: OSMFlutter(
+                onGeoPointClicked: onTap,
                 onMapIsReady: onMapReady,
                 controller: mapController,
                 trackMyPosition: false,
@@ -93,15 +72,10 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  onTapDown() {
-    print("onTapDown");
-  }
-
-  onDoubleTap() {
-    print("onDoubleTap");
-  }
-
   onTap(GeoPoint point) {
-    print("onTap");
+    print("onTap $point");
+    mapController.goToLocation(point);
+    mapController.setZoom(zoomLevel: 15);
+    mapController.zoomIn();
   }
 }

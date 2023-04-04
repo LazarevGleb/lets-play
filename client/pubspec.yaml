@@ -33,7 +33,6 @@ dependencies:
   http: ^0.13.5
   flutter_map: ^3.1.0
   flutter_osm_plugin: ^0.53.2
-  latlong2: ^0.8.0
   cupertino_icons: ^1.0.5
 
 dev_dependencies:

@@ -1,12 +1,12 @@
-import 'package:latlong2/latlong.dart';
+import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 
 class LetsPlayHttpClient {
-  List<LatLng> stadiums = [
-    LatLng(59.990628, 30.309782),
-    LatLng(59.98903, 30.30577),
+  List<GeoPoint> stadiums = [
+    GeoPoint(latitude: 59.990628, longitude: 30.309782),
+    GeoPoint(latitude: 59.98903, longitude: 30.30577),
   ];
 
-  List<LatLng> getStadiums() {
+  List<GeoPoint> getStadiums() {
     return stadiums;
   }
 }

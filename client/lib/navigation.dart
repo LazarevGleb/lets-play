@@ -14,11 +14,13 @@ class LetsPlayNavigation {
 
   static BottomNavigationBar of(int navIndex, BuildContext context) {
     return BottomNavigationBar(
+      selectedFontSize: 14,
+      unselectedFontSize: 14,
+      iconSize: 20,
       items: const [
         BottomNavigationBarItem(
             label: "Карта", icon: Icon(Icons.layers_rounded)),
-        BottomNavigationBarItem(
-            label: "Меню", icon: Icon(Icons.menu_rounded)),
+        BottomNavigationBarItem(label: "Меню", icon: Icon(Icons.menu_rounded)),
       ],
       currentIndex: navIndex,
       selectedItemColor: Colors.blueGrey,

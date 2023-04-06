@@ -1,4 +1,5 @@
 import 'package:client/navigation.dart';
+import 'package:client/stadium.dart';
 import 'package:client/text_constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,8 @@ class _MapPageState extends State<MapPage> {
 
   LetsPlayHttpClient client = LetsPlayHttpClient();
 
-  GeoPoint? selectedStadium;
+  Stadium? selectedStadium;
+  List<Stadium> stadiums = [];
 
   MapController mapController = MapController(
     initMapWithUserPosition: false,
@@ -30,15 +32,18 @@ class _MapPageState extends State<MapPage> {
   PanelController panelController = PanelController();
 
   void loadMarkers() {
-    client.getStadiums().forEach((point) {
-      mapController.addMarker(point,
+    setState(() {
+      stadiums = client.getStadiums();
+    });
+    for (var s in stadiums) {
+      mapController.addMarker(s.location,
           markerIcon: const MarkerIcon(
             iconWidget: Icon(
               CupertinoIcons.location_solid,
               size: 100,
             ),
           ));
-    });
+    }
   }
 
   void onMapReady(bool isReady) {
@@ -63,12 +68,12 @@ class _MapPageState extends State<MapPage> {
         controller: panelController,
         isDraggable: false,
         onPanelClosed: onPanelClosed,
-        panel: Center(child: Text("Стадион $selectedStadium")),
+        panel: Center(child: Text("$selectedStadium")),
         collapsed: Container(
             color: Colors.blueGrey,
             child: const Center(
                 child: Text(findStadiumAndLetsPlay,
-                    style: TextStyle(color: Colors.white)))),
+                    style: TextStyle(fontSize: 20,color: Colors.white)))),
         body: OSMFlutter(
           onGeoPointClicked: onTap,
           onMapIsReady: onMapReady,
@@ -88,7 +93,7 @@ class _MapPageState extends State<MapPage> {
     panelController.open();
     mapController.goToLocation(point);
     setState(() {
-      selectedStadium = point;
+      selectedStadium = getStadiumByPoint(point);
     });
   }
 
@@ -96,5 +101,14 @@ class _MapPageState extends State<MapPage> {
     setState(() {
       selectedStadium = null;
     });
+  }
+
+  Stadium? getStadiumByPoint(GeoPoint point) {
+    for (var s in stadiums) {
+      if (s.location == point) {
+        return s;
+      }
+    }
+    return null;
   }
 }

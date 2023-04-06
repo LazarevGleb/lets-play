@@ -1,2 +1,1 @@
-
-const String findStadiumAndLetsPlay = "Найди стадион и начни игру";
+const String findStadiumAndLetsPlay = "Найди футбольное поле и начни игру";

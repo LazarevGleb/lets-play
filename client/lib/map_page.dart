@@ -1,7 +1,9 @@
 import 'package:client/navigation.dart';
+import 'package:client/text_constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'http_client.dart';
 
@@ -17,11 +19,15 @@ class _MapPageState extends State<MapPage> {
 
   LetsPlayHttpClient client = LetsPlayHttpClient();
 
+  GeoPoint? selectedStadium;
+
   MapController mapController = MapController(
     initMapWithUserPosition: false,
     initPosition: GeoPoint(latitude: 59.990628, longitude: 30.309782),
     areaLimit: const BoundingBox.world(),
   );
+
+  PanelController panelController = PanelController();
 
   void loadMarkers() {
     client.getStadiums().forEach((point) {
@@ -50,23 +56,28 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-          child: Container(
-        child: Column(
-          children: [
-            Flexible(
-              child: OSMFlutter(
-                onGeoPointClicked: onTap,
-                onMapIsReady: onMapReady,
-                controller: mapController,
-                trackMyPosition: false,
-                initZoom: 15,
-                stepZoom: 10.0,
-              ),
-            )
-          ],
+      body: SlidingUpPanel(
+        backdropEnabled: true,
+        minHeight: 50,
+        maxHeight: 300,
+        controller: panelController,
+        isDraggable: false,
+        onPanelClosed: onPanelClosed,
+        panel: Center(child: Text("Стадион $selectedStadium")),
+        collapsed: Container(
+            color: Colors.blueGrey,
+            child: const Center(
+                child: Text(findStadiumAndLetsPlay,
+                    style: TextStyle(color: Colors.white)))),
+        body: OSMFlutter(
+          onGeoPointClicked: onTap,
+          onMapIsReady: onMapReady,
+          controller: mapController,
+          trackMyPosition: false,
+          initZoom: 15,
+          stepZoom: 10.0,
         ),
-      )),
+      ),
       bottomNavigationBar:
           LetsPlayNavigation.of(LetsPlayNavigation.mapIndex, context),
     );
@@ -74,8 +85,16 @@ class _MapPageState extends State<MapPage> {
 
   onTap(GeoPoint point) {
     print("onTap $point");
+    panelController.open();
     mapController.goToLocation(point);
-    mapController.setZoom(zoomLevel: 15);
-    mapController.zoomIn();
+    setState(() {
+      selectedStadium = point;
+    });
+  }
+
+  void onPanelClosed() {
+    setState(() {
+      selectedStadium = null;
+    });
   }
 }

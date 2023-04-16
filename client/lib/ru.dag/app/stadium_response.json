@@ -1,0 +1,11 @@
+{
+  "stadiums": [
+    {
+      "id": 1,
+      "location": {
+        "latitude": 59.990628,
+        "longitude": 30.309782
+      }
+    }
+  ]
+}

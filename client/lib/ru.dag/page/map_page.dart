@@ -1,12 +1,14 @@
-import 'package:client/navigation.dart';
-import 'package:client/stadium.dart';
-import 'package:client/text_constant.dart';
+import 'package:client/ru.dag/api/event_request.dart';
+import 'package:client/ru.dag/app/navigation.dart';
+import 'package:client/ru.dag/util/text_constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import 'http_client.dart';
+import '../api/http_client.dart';
+import '../api/stadium_request.dart';
+import '../domain/stadium_location.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -20,8 +22,8 @@ class _MapPageState extends State<MapPage> {
 
   LetsPlayHttpClient client = LetsPlayHttpClient();
 
-  Stadium? selectedStadium;
-  List<Stadium> stadiums = [];
+  StadiumLocation? selectedStadium;
+  Map<StadiumLocation, List<int>> stadiumData = {};
 
   MapController mapController = MapController(
     initMapWithUserPosition: false,
@@ -33,17 +35,26 @@ class _MapPageState extends State<MapPage> {
 
   void loadMarkers() {
     setState(() {
-      stadiums = client.getStadiums();
+      var stadiumRequest = StadiumRequest(
+          location: GeoPoint(latitude: 12, longitude: 12), distance: 12);
+
+      var eventRequest = EventRequest(
+          location: GeoPoint(latitude: 12, longitude: 12),
+          distance: 12,
+          dateFrom: '',
+          dateTill: '',
+          age: 1,
+          rank: 1);
+
+      client.findStadiums(stadiumRequest).then((value) => {
+            for (var e in value.stadiums)
+              {stadiumData.putIfAbsent(e, () => [])},
+            client.findEvents(eventRequest).then((value) => {
+
+            }),
+            setupMarkers()
+          });
     });
-    for (var s in stadiums) {
-      mapController.addMarker(s.location,
-          markerIcon: const MarkerIcon(
-            iconWidget: Icon(
-              CupertinoIcons.location_solid,
-              size: 100,
-            ),
-          ));
-    }
   }
 
   void onMapReady(bool isReady) {
@@ -60,6 +71,8 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
+    var stadiumPanel = Center(child: Text("$selectedStadium"));
+
     return Scaffold(
       body: SlidingUpPanel(
         backdropEnabled: true,
@@ -68,12 +81,12 @@ class _MapPageState extends State<MapPage> {
         controller: panelController,
         isDraggable: false,
         onPanelClosed: onPanelClosed,
-        panel: Center(child: Text("$selectedStadium")),
+        panel: stadiumPanel,
         collapsed: Container(
             color: Colors.blueGrey,
             child: const Center(
                 child: Text(findStadiumAndLetsPlay,
-                    style: TextStyle(fontSize: 20,color: Colors.white)))),
+                    style: TextStyle(fontSize: 20, color: Colors.white)))),
         body: OSMFlutter(
           onGeoPointClicked: onTap,
           onMapIsReady: onMapReady,
@@ -103,12 +116,24 @@ class _MapPageState extends State<MapPage> {
     });
   }
 
-  Stadium? getStadiumByPoint(GeoPoint point) {
-    for (var s in stadiums) {
-      if (s.location == point) {
-        return s;
+  StadiumLocation? getStadiumByPoint(GeoPoint point) {
+    for (var s in stadiumData.keys) {
+      if (s == point) {
+        return null;
       }
     }
     return null;
+  }
+
+  void setupMarkers() {
+    for (var s in stadiumData.keys) {
+      mapController.addMarker(s.location,
+          markerIcon: const MarkerIcon(
+            iconWidget: Icon(
+              CupertinoIcons.location_solid,
+              size: 100,
+            ),
+          ));
+    }
   }
 }

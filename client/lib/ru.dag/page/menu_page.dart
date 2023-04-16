@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'navigation.dart';
+import '../app/navigation.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({Key? key}) : super(key: key);

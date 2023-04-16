@@ -1,6 +1,6 @@
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 
-class Stadium {
+class Stadium_OLD {
   //    val address: String,
   //     val location: Location,
   //     val capacity: Capacity,
@@ -14,14 +14,14 @@ class Stadium {
   final GeoPoint location;
   final String capacity;
 
-  const Stadium(
+  const Stadium_OLD(
       {required this.description,
       required this.address,
       required this.location,
       required this.capacity});
 
-  factory Stadium.fromJson(Map<String, dynamic> json) {
-    return Stadium(
+  factory Stadium_OLD.fromJson(Map<String, dynamic> json) {
+    return Stadium_OLD(
         description: json['description'],
         address: json['address'],
         location:

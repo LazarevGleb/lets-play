@@ -1,8 +1,8 @@
-import 'package:client/navigation.dart';
+import 'package:client/ru.dag/app/navigation.dart';
 import 'package:flutter/material.dart';
 
-import 'map_page.dart';
-import 'menu_page.dart';
+import '../page/map_page.dart';
+import '../page/menu_page.dart';
 
 void main() => runApp(MaterialApp(
       debugShowCheckedModeBanner: false,

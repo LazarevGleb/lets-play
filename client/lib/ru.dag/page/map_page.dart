@@ -1,4 +1,4 @@
-import 'package:client/ru.dag/api/event_request.dart';
+import 'package:client/ru.dag/api/stadium_events_request.dart';
 import 'package:client/ru.dag/app/navigation.dart';
 import 'package:client/ru.dag/util/text_constant.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +8,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../api/http_client.dart';
 import '../api/stadium_request.dart';
+import '../domain/stadium_data.dart';
 import '../domain/stadium_location.dart';
 
 class MapPage extends StatefulWidget {
@@ -23,7 +24,8 @@ class _MapPageState extends State<MapPage> {
   LetsPlayHttpClient client = LetsPlayHttpClient();
 
   StadiumLocation? selectedStadium;
-  Map<StadiumLocation, List<int>> stadiumData = {};
+
+  Map<int, StadiumData> stadiumData = {};
 
   MapController mapController = MapController(
     initMapWithUserPosition: false,
@@ -38,7 +40,7 @@ class _MapPageState extends State<MapPage> {
       var stadiumRequest = StadiumRequest(
           location: GeoPoint(latitude: 12, longitude: 12), distance: 12);
 
-      var eventRequest = EventRequest(
+      var eventRequest = StadiumEventsRequest(
           location: GeoPoint(latitude: 12, longitude: 12),
           distance: 12,
           dateFrom: '',
@@ -47,11 +49,22 @@ class _MapPageState extends State<MapPage> {
           rank: 1);
 
       client.findStadiums(stadiumRequest).then((value) => {
-            for (var e in value.stadiums)
-              {stadiumData.putIfAbsent(e, () => [])},
+            for (var s in value.stadiums)
+              {
+                stadiumData.putIfAbsent(s.id,
+                    () => StadiumData(stadiumId: s.id, location: s.location))
+              },
             client.findEvents(eventRequest).then((value) => {
-
-            }),
+                  for (var e in value.events)
+                    {
+                      stadiumData.update(
+                          e.stadiumId,
+                          (v) => StadiumData.withEvents(
+                              stadiumId: v.stadiumId,
+                              location: v.location,
+                              eventIds: e.eventIds))
+                    },
+                }),
             setupMarkers()
           });
     });
@@ -126,7 +139,17 @@ class _MapPageState extends State<MapPage> {
   }
 
   void setupMarkers() {
-    for (var s in stadiumData.keys) {
+    for (var s in stadiumData.values) {
+      mapController.addMarker(s.location,
+          markerIcon: const MarkerIcon(
+            iconWidget: Icon(
+              CupertinoIcons.,
+              size: 100,
+            ),
+          ));
+      if (s.eventIds.isEmpty) {
+        return;
+      }
       mapController.addMarker(s.location,
           markerIcon: const MarkerIcon(
             iconWidget: Icon(

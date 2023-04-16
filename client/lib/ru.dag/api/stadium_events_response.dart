@@ -9,11 +9,11 @@ class EventResponse {
 
   factory EventResponse.fromJson(String json) {
     List<StadiumEvents> events = [];
-    List<dynamic> list = jsonDecode(json);
+    List<dynamic> list = jsonDecode(json)["stadiumEvents"] as List;
 
     for (var element in list) {
       var stadiumId = element["stadiumId"];
-      var eventIds = element["eventIds"];
+      List<int> eventIds = element["eventIds"].cast<int>();
 
       events.add(StadiumEvents(stadiumId: stadiumId, eventIds: eventIds));
     }

@@ -1,6 +1,6 @@
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 
-class EventRequest {
+class StadiumEventsRequest {
   final GeoPoint location;
   final double distance;
   final String dateFrom;
@@ -8,7 +8,7 @@ class EventRequest {
   final int age;
   final double rank;
 
-  const EventRequest({
+  const StadiumEventsRequest({
     required this.location,
     required this.distance,
     required this.dateFrom,

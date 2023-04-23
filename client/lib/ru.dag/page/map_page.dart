@@ -149,8 +149,9 @@ class _MapPageState extends State<MapPage> {
           .addMarker(s.location,
               markerIcon: const MarkerIcon(
                 iconWidget: Icon(
-                  CupertinoIcons.sportscourt_fill,
-                  size: 100,
+                  CupertinoIcons.circle_filled,
+                  color: Color(0xFF455A64),
+                  size: 75,
                 ),
               ))
           .then((value) => {
@@ -160,8 +161,9 @@ class _MapPageState extends State<MapPage> {
                         s.location,
                         const MarkerIcon(
                           iconWidget: Icon(
-                            CupertinoIcons.location_solid,
-                            size: 100,
+                            CupertinoIcons.chevron_down_circle_fill,
+                            color: Color(0xFF455A64),
+                            size: 75,
                           ),
                         ))
                   }

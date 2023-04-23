@@ -9,7 +9,6 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../api/http_client.dart';
 import '../api/stadium_location_request.dart';
 import '../domain/stadium_data.dart';
-import '../domain/stadium_location.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -23,7 +22,7 @@ class _MapPageState extends State<MapPage> {
 
   LetsPlayHttpClient client = LetsPlayHttpClient();
 
-  StadiumLocation? selectedStadium;
+  Widget? selectedItem;
 
   Map<int, StadiumData> stadiumData = {};
 
@@ -64,8 +63,8 @@ class _MapPageState extends State<MapPage> {
                               location: v.location,
                               eventIds: e.eventIds))
                     },
-              setupMarkers()
-            }),
+                  setupMarkers()
+                }),
           });
     });
   }
@@ -84,7 +83,6 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    var stadiumPanel = Center(child: Text("$selectedStadium"));
 
     return Scaffold(
       body: SlidingUpPanel(
@@ -94,7 +92,7 @@ class _MapPageState extends State<MapPage> {
         controller: panelController,
         isDraggable: false,
         onPanelClosed: onPanelClosed,
-        panel: stadiumPanel,
+        panel: selectedItem ?? const Text("Что-то пошло не так"),
         collapsed: Container(
             color: Colors.blueGrey,
             child: const Center(
@@ -118,46 +116,56 @@ class _MapPageState extends State<MapPage> {
     print("onTap $point");
     panelController.open();
     mapController.goToLocation(point);
+
     setState(() {
-      selectedStadium = getStadiumByPoint(point);
+      selectedItem = getStadiumByPoint(point);
     });
   }
 
   void onPanelClosed() {
     setState(() {
-      selectedStadium = null;
+      selectedItem = null;
     });
   }
 
-  StadiumLocation? getStadiumByPoint(GeoPoint point) {
-    for (var s in stadiumData.keys) {
-      if (s == point) {
-        return null;
+  Widget? getStadiumByPoint(GeoPoint point) {
+    for (var s in stadiumData.values) {
+      if (s.location != point) {
+        continue;
       }
+      if (s.eventIds.isNotEmpty) {
+        // Загрузим информацию о событиях и отобразим их
+        return new Text(s.eventIds.toString());
+      }
+      // Загрузим информацию о стадионе и отобразим её
+      return new Text(s.stadiumId.toString());
     }
     return null;
   }
 
   void setupMarkers() {
     for (var s in stadiumData.values) {
-
-      if (s.eventIds.isEmpty) {
-        mapController.addMarker(s.location,
-            markerIcon: const MarkerIcon(
-              iconWidget: Icon(
-                CupertinoIcons.sportscourt,
-                size: 100,
-              ),
-            ));
-      } else {
-        mapController.addMarker(s.location,
-            markerIcon: const MarkerIcon(
-              iconWidget: Icon(
-                CupertinoIcons.ant,
-                size: 100,
-              ),
-            ));
-      }
+      mapController
+          .addMarker(s.location,
+              markerIcon: const MarkerIcon(
+                iconWidget: Icon(
+                  CupertinoIcons.sportscourt_fill,
+                  size: 100,
+                ),
+              ))
+          .then((value) => {
+                if (s.eventIds.isNotEmpty)
+                  {
+                    mapController.setMarkerIcon(
+                        s.location,
+                        const MarkerIcon(
+                          iconWidget: Icon(
+                            CupertinoIcons.location_solid,
+                            size: 100,
+                          ),
+                        ))
+                  }
+              });
     }
   }
 }

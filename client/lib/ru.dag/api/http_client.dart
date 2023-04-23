@@ -1,18 +1,21 @@
-import 'package:client/ru.dag/api/stadium_request.dart';
-import 'package:client/ru.dag/api/stadium_response.dart';
+import 'dart:io';
 
-import 'stadium_events_request.dart';
-import 'stadium_events_response.dart';
+import 'package:client/ru.dag/api/stadium_location_request.dart';
+import 'package:client/ru.dag/api/stadium_location_response.dart';
+
+import 'event_location_request.dart';
+import 'event_location_response.dart';
 
 class LetsPlayHttpClient {
-  Future<StadiumsResponse> findStadiums(StadiumRequest request) async {
-    var input =
-        "{\"stadiums\": [{\"id\": 1,\"location\": {\"latitude\": 59.990628,\"longitude\": 30.309782}}]}";
-    return StadiumsResponse.fromJson(input);
+  Future<StadiumLocationResponse> findStadiums(StadiumLocationRequest request) async {
+    var path = "/storage/1421-390B/Android/data/com.dag.lets_play.client/files/mock_response/stadium_location_response.json";
+    var input = await File(path).readAsString();
+    return StadiumLocationResponse.fromJson(input);
   }
 
-  Future<EventResponse> findEvents(StadiumEventsRequest request) async {
-    var input = "{\"stadiumEvents\": [{\"stadiumId\": 1,\"eventIds\": [1,2,3]}]}";
-    return EventResponse.fromJson(input);
+  Future<EventLocationResponse> findEvents(EventLocationRequest request) async {
+    var path = "/storage/1421-390B/Android/data/com.dag.lets_play.client/files/mock_response/event_location_response.json";
+    var input = await File(path).readAsString();
+    return EventLocationResponse.fromJson(input);
   }
 }

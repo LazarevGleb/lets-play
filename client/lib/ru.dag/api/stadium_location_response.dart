@@ -4,12 +4,12 @@ import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 
 import '../domain/stadium_location.dart';
 
-class StadiumsResponse {
+class StadiumLocationResponse {
   final List<StadiumLocation> stadiums;
 
-  const StadiumsResponse({required this.stadiums});
+  const StadiumLocationResponse({required this.stadiums});
 
-  factory StadiumsResponse.fromJson(String json) {
+  factory StadiumLocationResponse.fromJson(String json) {
     List<StadiumLocation> stadiums = [];
     List<dynamic> list = jsonDecode(json)["stadiums"] as List;
 
@@ -23,6 +23,6 @@ class StadiumsResponse {
       stadiums.add(stadium);
     }
 
-    return StadiumsResponse(stadiums: stadiums);
+    return StadiumLocationResponse(stadiums: stadiums);
   }
 }

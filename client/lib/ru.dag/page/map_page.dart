@@ -1,4 +1,4 @@
-import 'package:client/ru.dag/api/stadium_events_request.dart';
+import 'package:client/ru.dag/api/event_location_request.dart';
 import 'package:client/ru.dag/app/navigation.dart';
 import 'package:client/ru.dag/util/text_constant.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,7 +7,7 @@ import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../api/http_client.dart';
-import '../api/stadium_request.dart';
+import '../api/stadium_location_request.dart';
 import '../domain/stadium_data.dart';
 import '../domain/stadium_location.dart';
 
@@ -37,10 +37,10 @@ class _MapPageState extends State<MapPage> {
 
   void loadMarkers() {
     setState(() {
-      var stadiumRequest = StadiumRequest(
+      var stadiumRequest = StadiumLocationRequest(
           location: GeoPoint(latitude: 12, longitude: 12), distance: 12);
 
-      var eventRequest = StadiumEventsRequest(
+      var eventRequest = EventLocationRequest(
           location: GeoPoint(latitude: 12, longitude: 12),
           distance: 12,
           dateFrom: '',
@@ -64,13 +64,13 @@ class _MapPageState extends State<MapPage> {
                               location: v.location,
                               eventIds: e.eventIds))
                     },
-                }),
-            setupMarkers()
+              setupMarkers()
+            }),
           });
     });
   }
 
-  void onMapReady(bool isReady) {
+  Future<void> onMapReady(bool isReady) async {
     if (!isReady) {
       return;
     }
@@ -140,23 +140,24 @@ class _MapPageState extends State<MapPage> {
 
   void setupMarkers() {
     for (var s in stadiumData.values) {
-      mapController.addMarker(s.location,
-          markerIcon: const MarkerIcon(
-            iconWidget: Icon(
-              CupertinoIcons.,
-              size: 100,
-            ),
-          ));
+
       if (s.eventIds.isEmpty) {
-        return;
+        mapController.addMarker(s.location,
+            markerIcon: const MarkerIcon(
+              iconWidget: Icon(
+                CupertinoIcons.sportscourt,
+                size: 100,
+              ),
+            ));
+      } else {
+        mapController.addMarker(s.location,
+            markerIcon: const MarkerIcon(
+              iconWidget: Icon(
+                CupertinoIcons.ant,
+                size: 100,
+              ),
+            ));
       }
-      mapController.addMarker(s.location,
-          markerIcon: const MarkerIcon(
-            iconWidget: Icon(
-              CupertinoIcons.location_solid,
-              size: 100,
-            ),
-          ));
     }
   }
 }

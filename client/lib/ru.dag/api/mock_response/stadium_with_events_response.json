@@ -1,0 +1,35 @@
+{
+  "stadium": {
+    "address": "string",
+    "location": {
+      "latitude": 0,
+      "longitude": 0
+    },
+    "capacity": "5x5",
+    "description": "string",
+    "avatar": "",
+    "data": {
+      "additionalProp1": {},
+      "additionalProp2": {},
+      "additionalProp3": {}
+    },
+    "createdAt": "2023-04-23T19:55:02.010Z",
+    "removedAt": "2023-04-23T19:55:02.010Z"
+  },
+  "events": [
+    {
+      "id": 0,
+      "stadiumId": 0,
+      "beginAt": "2023-04-23T19:55:02.010Z",
+      "isFinished": true,
+      "isCanceled": false,
+      "currentPlayers": 0,
+      "minPlayers": 0,
+      "minAge": 0,
+      "maxAge": 14,
+      "minRank": 0,
+      "maxRank": 9,
+      "createdAt": "2023-04-23T19:55:02.010Z"
+    }
+  ]
+}

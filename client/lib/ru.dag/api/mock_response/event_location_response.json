@@ -1,45 +1,42 @@
-{
-  "stadiumEvents": [
-
-    {
-      "stadiumId": 1,
-      "eventIds": [
-        1,
-        2,
-        3
-      ]
-    },
-    {
-      "stadiumId": 2,
-      "eventIds": [
-        1,
-        2,
-        3
-      ]
-    },
-    {
-      "stadiumId": 3,
-      "eventIds": [
-        1,
-        2,
-        3
-      ]
-    },
-    {
-      "stadiumId": 4,
-      "eventIds": [
-        1,
-        2,
-        3
-      ]
-    },
-    {
-      "stadiumId": 5,
-      "eventIds": [
-        1,
-        2,
-        3
-      ]
-    }
-  ]
-}
+[
+  {
+    "stadiumId": 1,
+    "eventIds": [
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "stadiumId": 2,
+    "eventIds": [
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "stadiumId": 3,
+    "eventIds": [
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "stadiumId": 4,
+    "eventIds": [
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "stadiumId": 5,
+    "eventIds": [
+      1,
+      2,
+      3
+    ]
+  }
+]

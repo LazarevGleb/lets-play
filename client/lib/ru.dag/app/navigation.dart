@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LetsPlayNavigation {
@@ -19,8 +20,8 @@ class LetsPlayNavigation {
       iconSize: 20,
       items: const [
         BottomNavigationBarItem(
-            label: "Карта", icon: Icon(Icons.layers_rounded)),
-        BottomNavigationBarItem(label: "Меню", icon: Icon(Icons.menu_rounded)),
+            label: "Карта", icon: Icon(CupertinoIcons.map_pin_ellipse)),
+        BottomNavigationBarItem(label: "Меню", icon: Icon(CupertinoIcons.gear_alt)),
       ],
       currentIndex: navIndex,
       selectedItemColor: Colors.blueGrey,

@@ -9,7 +9,7 @@ class EventLocationResponse {
 
   factory EventLocationResponse.fromJson(String json) {
     List<StadiumEvent> events = [];
-    List<dynamic> list = jsonDecode(json)["stadiumEvents"] as List;
+    List<dynamic> list = jsonDecode(json) as List;
 
     for (var element in list) {
       var stadiumId = element["stadiumId"];

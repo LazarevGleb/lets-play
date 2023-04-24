@@ -83,7 +83,6 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: SlidingUpPanel(
         backdropEnabled: true,
@@ -147,25 +146,20 @@ class _MapPageState extends State<MapPage> {
     for (var s in stadiumData.values) {
       mapController
           .addMarker(s.location,
-              markerIcon: const MarkerIcon(
-                iconWidget: Icon(
-                  CupertinoIcons.circle_filled,
-                  color: Color(0xFF455A64),
-                  size: 75,
-                ),
-              ))
+              markerIcon: MarkerIcon(
+                  assetMarker: AssetMarker(
+                      image: const AssetImage("assets/images/green_marker.png"),
+                      scaleAssetImage: 1.4)))
           .then((value) => {
                 if (s.eventIds.isNotEmpty)
                   {
                     mapController.setMarkerIcon(
                         s.location,
-                        const MarkerIcon(
-                          iconWidget: Icon(
-                            CupertinoIcons.chevron_down_circle_fill,
-                            color: Color(0xFF455A64),
-                            size: 75,
-                          ),
-                        ))
+                        MarkerIcon(
+                            assetMarker: AssetMarker(
+                                image: const AssetImage(
+                                    "assets/images/red_marker.png"),
+                                scaleAssetImage: 1.4)))
                   }
               });
     }

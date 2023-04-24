@@ -11,7 +11,7 @@ class StadiumLocationResponse {
 
   factory StadiumLocationResponse.fromJson(String json) {
     List<StadiumLocation> stadiums = [];
-    List<dynamic> list = jsonDecode(json)["stadiums"] as List;
+    List<dynamic> list = jsonDecode(json) as List;
 
     for (var element in list) {
       var stadium = StadiumLocation(

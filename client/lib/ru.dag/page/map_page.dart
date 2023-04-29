@@ -1,7 +1,6 @@
 import 'package:client/ru.dag/api/event_location_request.dart';
 import 'package:client/ru.dag/app/navigation.dart';
 import 'package:client/ru.dag/util/text_constant.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -9,6 +8,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../api/http_client.dart';
 import '../api/stadium_location_request.dart';
 import '../domain/stadium_data.dart';
+import '../widget/map_widget_builder.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -22,13 +22,14 @@ class _MapPageState extends State<MapPage> {
 
   LetsPlayHttpClient client = LetsPlayHttpClient();
 
+  bool locationGranted = false;
+
   Widget? selectedItem;
 
   Map<int, StadiumData> stadiumData = {};
 
   MapController mapController = MapController(
-    initMapWithUserPosition: false,
-    initPosition: GeoPoint(latitude: 59.990628, longitude: 30.309782),
+    initMapWithUserPosition: true,
     areaLimit: const BoundingBox.world(),
   );
 
@@ -70,15 +71,43 @@ class _MapPageState extends State<MapPage> {
   }
 
   Future<void> onMapReady(bool isReady) async {
-    if (!isReady) {
-      return;
-    }
-    loadMarkers();
-  }
+    setState(() {
+      locationGranted = isReady;
+    });
 
-  @override
-  void initState() {
-    super.initState();
+    if (locationGranted) {
+      loadMarkers();
+    }
+
+    //
+    // var isServiceEnabled = await Permission.location.serviceStatus.isEnabled;
+    //
+    // if (!isServiceEnabled) {
+    //   return;
+    // }
+    //
+    // var status = await Permission.location.status;
+    //
+    // if (status.isGranted) {
+    //   setState(() {
+    //     locationGranted = true;
+    //   });
+    //   return;
+    // }
+    //
+    // Map<Permission, PermissionStatus> permission = await [
+    //   Permission.location,
+    // ].request();
+    //
+    // var locationInUseGranted = permission[Permission.locationWhenInUse] == PermissionStatus.granted;
+    // var locationPermanentGranted = permission[Permission.location] == PermissionStatus.granted;
+    //
+    // if (locationInUseGranted || locationPermanentGranted) {
+    //   setState(() {
+    //     locationGranted = true;
+    //   });
+    //   return;
+    // }
   }
 
   @override
@@ -98,10 +127,11 @@ class _MapPageState extends State<MapPage> {
                 child: Text(findStadiumAndLetsPlay,
                     style: TextStyle(fontSize: 20, color: Colors.white)))),
         body: OSMFlutter(
+          userLocationMarker: MapMarkerBuilder.playerMarker(),
           onGeoPointClicked: onTap,
           onMapIsReady: onMapReady,
           controller: mapController,
-          trackMyPosition: false,
+          trackMyPosition: true,
           initZoom: 15,
           stepZoom: 10.0,
         ),
@@ -142,26 +172,13 @@ class _MapPageState extends State<MapPage> {
     return null;
   }
 
-  void setupMarkers() {
+  Future<void> setupMarkers() async {
     for (var s in stadiumData.values) {
-      mapController
-          .addMarker(s.location,
-              markerIcon: MarkerIcon(
-                  assetMarker: AssetMarker(
-                      image: const AssetImage("assets/images/green_marker.png"),
-                      scaleAssetImage: 1.4)))
-          .then((value) => {
-                if (s.eventIds.isNotEmpty)
-                  {
-                    mapController.setMarkerIcon(
-                        s.location,
-                        MarkerIcon(
-                            assetMarker: AssetMarker(
-                                image: const AssetImage(
-                                    "assets/images/red_marker.png"),
-                                scaleAssetImage: 1.4)))
-                  }
-              });
+      if (s.eventIds.isEmpty) {
+        await mapController.addMarker(s.location, markerIcon: MapMarkerBuilder.stadiumMarker());
+      } else {
+        await mapController.addMarker(s.location, markerIcon: MapMarkerBuilder.eventMarker());
+      }
     }
   }
 }

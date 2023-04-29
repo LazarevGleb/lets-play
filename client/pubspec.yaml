@@ -61,9 +61,6 @@ flutter:
   fonts:
     - family: LetsPlayFont
       fonts:
-        - asset: fonts/Neucha-Regular.ttf
-    - family: LetsPlayFont2
-      fonts:
         - asset: fonts/BellotaText-Regular.ttf
 
   # To add assets to your application, add an assets section, like this:

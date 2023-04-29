@@ -5,6 +5,7 @@ class LetsPlayNavigation {
   static const int mapIndex = 0;
   static const int menuIndex = 1;
 
+  static const String welcomeRoute = "/greeting";
   static const String mapRoute = "/map";
   static const String menuRoute = "/menu";
 

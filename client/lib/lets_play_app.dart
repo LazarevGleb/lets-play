@@ -43,7 +43,7 @@ class LetsPlayState extends State<LetsPlayApp> {
 
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(fontFamily: 'LetsPlayFont2',
+        theme: ThemeData(fontFamily: 'LetsPlayFont',
           textTheme: const TextTheme(
             displayLarge: TextStyle(fontSize: 72.0),
             titleLarge: TextStyle(fontSize: 40.0),

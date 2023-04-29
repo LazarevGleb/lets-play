@@ -3,15 +3,17 @@ import 'package:flutter/material.dart';
 
 import '../page/map_page.dart';
 import '../page/menu_page.dart';
+import '../page/welcome_page.dart';
 
 void main() => runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        fontFamily: 'LetsPlayFont2',
+        fontFamily: 'LetsPlayFont',
       ),
-      initialRoute: LetsPlayNavigation.mapRoute,
+      initialRoute: LetsPlayNavigation.welcomeRoute,
       routes: {
-        LetsPlayNavigation.mapRoute: (context) => MapPage(),
-        LetsPlayNavigation.menuRoute: (context) => MenuPage(),
+        LetsPlayNavigation.welcomeRoute: (context) => const WelcomePage(),
+        LetsPlayNavigation.mapRoute: (context) => const MapPage(),
+        LetsPlayNavigation.menuRoute: (context) => const MenuPage(),
       },
     ));

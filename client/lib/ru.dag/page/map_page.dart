@@ -1,9 +1,8 @@
 import 'package:client/ru.dag/api/event_location_request.dart';
 import 'package:client/ru.dag/app/navigation.dart';
-import 'package:client/ru.dag/util/text_constant.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../api/http_client.dart';
 import '../api/stadium_location_request.dart';
@@ -24,16 +23,12 @@ class _MapPageState extends State<MapPage> {
 
   bool locationGranted = false;
 
-  Widget? selectedItem;
-
   Map<int, StadiumData> stadiumData = {};
 
   MapController mapController = MapController(
     initMapWithUserPosition: true,
     areaLimit: const BoundingBox.world(),
   );
-
-  PanelController panelController = PanelController();
 
   void loadMarkers() {
     setState(() {
@@ -113,19 +108,6 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SlidingUpPanel(
-        backdropEnabled: true,
-        minHeight: 50,
-        maxHeight: 300,
-        controller: panelController,
-        isDraggable: false,
-        onPanelClosed: onPanelClosed,
-        panel: selectedItem ?? const Text("Что-то пошло не так"),
-        collapsed: Container(
-            color: Colors.blueGrey,
-            child: const Center(
-                child: Text(findStadiumAndLetsPlay,
-                    style: TextStyle(fontSize: 20, color: Colors.white)))),
         body: OSMFlutter(
           userLocationMarker: MapMarkerBuilder.playerMarker(),
           onGeoPointClicked: onTap,
@@ -135,26 +117,61 @@ class _MapPageState extends State<MapPage> {
           initZoom: 15,
           stepZoom: 10.0,
         ),
-      ),
-      bottomNavigationBar:
-          LetsPlayNavigation.of(LetsPlayNavigation.mapIndex, context),
-    );
+        // ),
+        bottomNavigationBar:
+            LetsPlayNavigation.of(LetsPlayNavigation.mapIndex, context),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.all(0.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              FloatingActionButton(
+                backgroundColor: Colors.pinkAccent,
+                onPressed: () {},
+                child: const Icon(CupertinoIcons.slider_horizontal_3),
+              ),
+              const SizedBox(height: 15),
+              FloatingActionButton(
+                onPressed: () {
+                  mapController.currentLocation();
+                },
+                child: const Icon(CupertinoIcons.location_north),
+              ),
+            ],
+          ),
+        ));
   }
 
   onTap(GeoPoint point) {
     print("onTap $point");
-    panelController.open();
+    Widget? widget;
     mapController.goToLocation(point);
 
-    setState(() {
-      selectedItem = getStadiumByPoint(point);
-    });
-  }
+    for (var s in stadiumData.values) {
+      if (s.location != point) {
+        continue;
+      }
+      if (s.eventIds.isNotEmpty) {
+        // Загрузим информацию о событиях и отобразим их
+        widget = Text(s.eventIds.toString());
+      } else {
+        // Загрузим информацию о стадионе и отобразим её
+        widget = Text(s.stadiumId.toString());
+      }
+    }
 
-  void onPanelClosed() {
-    setState(() {
-      selectedItem = null;
-    });
+    if (widget == null) {
+      return;
+    }
+
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            height: 500,
+            child: widget,
+          );
+        });
   }
 
   Widget? getStadiumByPoint(GeoPoint point) {
@@ -164,10 +181,10 @@ class _MapPageState extends State<MapPage> {
       }
       if (s.eventIds.isNotEmpty) {
         // Загрузим информацию о событиях и отобразим их
-        return new Text(s.eventIds.toString());
+        return Text(s.eventIds.toString());
       }
       // Загрузим информацию о стадионе и отобразим её
-      return new Text(s.stadiumId.toString());
+      return Text(s.stadiumId.toString());
     }
     return null;
   }
@@ -175,9 +192,11 @@ class _MapPageState extends State<MapPage> {
   Future<void> setupMarkers() async {
     for (var s in stadiumData.values) {
       if (s.eventIds.isEmpty) {
-        await mapController.addMarker(s.location, markerIcon: MapMarkerBuilder.stadiumMarker());
+        await mapController.addMarker(s.location,
+            markerIcon: MapMarkerBuilder.stadiumMarker());
       } else {
-        await mapController.addMarker(s.location, markerIcon: MapMarkerBuilder.eventMarker());
+        await mapController.addMarker(s.location,
+            markerIcon: MapMarkerBuilder.eventMarker());
       }
     }
   }

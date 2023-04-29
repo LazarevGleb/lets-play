@@ -205,7 +205,6 @@ class _MapPageState extends State<MapPage> {
         builder: (context) {
           return Container(
             height: 200,
-            color: Colors.amber,
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

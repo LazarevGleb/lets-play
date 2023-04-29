@@ -1,8 +1,10 @@
 import 'package:client/ru.dag/api/event_location_request.dart';
 import 'package:client/ru.dag/app/navigation.dart';
+import 'package:client/ru.dag/util/text_constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../api/http_client.dart';
 import '../api/stadium_location_request.dart';
@@ -73,36 +75,6 @@ class _MapPageState extends State<MapPage> {
     if (locationGranted) {
       loadMarkers();
     }
-
-    //
-    // var isServiceEnabled = await Permission.location.serviceStatus.isEnabled;
-    //
-    // if (!isServiceEnabled) {
-    //   return;
-    // }
-    //
-    // var status = await Permission.location.status;
-    //
-    // if (status.isGranted) {
-    //   setState(() {
-    //     locationGranted = true;
-    //   });
-    //   return;
-    // }
-    //
-    // Map<Permission, PermissionStatus> permission = await [
-    //   Permission.location,
-    // ].request();
-    //
-    // var locationInUseGranted = permission[Permission.locationWhenInUse] == PermissionStatus.granted;
-    // var locationPermanentGranted = permission[Permission.location] == PermissionStatus.granted;
-    //
-    // if (locationInUseGranted || locationPermanentGranted) {
-    //   setState(() {
-    //     locationGranted = true;
-    //   });
-    //   return;
-    // }
   }
 
   @override
@@ -133,7 +105,7 @@ class _MapPageState extends State<MapPage> {
               const SizedBox(height: 15),
               FloatingActionButton(
                 onPressed: () {
-                  mapController.currentLocation();
+                  onMyLocation();
                 },
                 child: const Icon(CupertinoIcons.location_north),
               ),
@@ -174,19 +146,45 @@ class _MapPageState extends State<MapPage> {
         });
   }
 
-  Widget? getStadiumByPoint(GeoPoint point) {
-    for (var s in stadiumData.values) {
-      if (s.location != point) {
-        continue;
-      }
-      if (s.eventIds.isNotEmpty) {
-        // Загрузим информацию о событиях и отобразим их
-        return Text(s.eventIds.toString());
-      }
-      // Загрузим информацию о стадионе и отобразим её
-      return Text(s.stadiumId.toString());
+  onMyLocation() async {
+    if (locationGranted) {
+      mapController.currentLocation();
+      return;
     }
-    return null;
+
+    var isServiceEnabled = await Permission.location.serviceStatus.isEnabled;
+
+    if (!isServiceEnabled) {
+      return;
+    }
+
+    var status = await Permission.location.status;
+
+    if (status.isGranted) {
+      setState(() {
+        locationGranted = true;
+      });
+      return;
+    }
+
+    Map<Permission, PermissionStatus> permission = await [
+      Permission.location,
+    ].request();
+
+    var locationInUseGranted =
+        permission[Permission.locationWhenInUse] == PermissionStatus.granted;
+    var locationPermanentGranted =
+        permission[Permission.location] == PermissionStatus.granted;
+
+    if (locationInUseGranted || locationPermanentGranted) {
+      setState(() {
+        locationGranted = true;
+      });
+      mapController.currentLocation();
+      return;
+    }
+
+    handleLocationSettings();
   }
 
   Future<void> setupMarkers() async {
@@ -199,5 +197,30 @@ class _MapPageState extends State<MapPage> {
             markerIcon: MapMarkerBuilder.eventMarker());
       }
     }
+  }
+
+  void handleLocationSettings() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            height: 200,
+            color: Colors.amber,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  const Center(child: Text(locationTurnedOffErrorMessage)),
+                  ElevatedButton(
+                    child: const Text(locationSettingButton),
+                    onPressed: () =>
+                        {openAppSettings(), Navigator.pop(context)},
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }

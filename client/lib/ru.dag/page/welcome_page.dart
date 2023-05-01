@@ -9,14 +9,10 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-
   @override
   void initState() {
     super.initState();
-
-
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +20,7 @@ class _WelcomePageState extends State<WelcomePage> {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            var routeName = LetsPlayNavigation.mapRoute;
+            var routeName = LetsPlayNavigation.mainRoute;
             Navigator.of(context).pushReplacementNamed(routeName);
           },
           child: const Text("Перейти к карте"),
@@ -32,6 +28,4 @@ class _WelcomePageState extends State<WelcomePage> {
       ),
     );
   }
-
-
 }

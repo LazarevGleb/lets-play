@@ -1,5 +1,4 @@
 import 'package:client/ru.dag/api/event_location_request.dart';
-import 'package:client/ru.dag/app/navigation.dart';
 import 'package:client/ru.dag/util/text_constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,8 @@ import 'package:permission_handler/permission_handler.dart';
 import '../api/http_client.dart';
 import '../api/stadium_location_request.dart';
 import '../domain/stadium_data.dart';
+import '../util/theme/lets_play_theme.dart';
+import '../util/theme/theme_picker.dart';
 import '../widget/map_widget_builder.dart';
 
 class MapPage extends StatefulWidget {
@@ -19,6 +20,8 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
+  LetsPlayTheme theme = ThemePicker.getCurrentTheme();
+
   GeoPoint home = GeoPoint(latitude: 59.990628, longitude: 30.309782);
 
   LetsPlayHttpClient client = LetsPlayHttpClient();
@@ -89,26 +92,26 @@ class _MapPageState extends State<MapPage> {
           initZoom: 15,
           stepZoom: 10.0,
         ),
-        // ),
-        bottomNavigationBar:
-            LetsPlayNavigation.of(LetsPlayNavigation.mapIndex, context),
         floatingActionButton: Padding(
           padding: const EdgeInsets.all(0.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               FloatingActionButton(
-                backgroundColor: Colors.pinkAccent,
-                onPressed: () {},
+                backgroundColor: theme.filterBtnColor(),
                 child: const Icon(CupertinoIcons.slider_horizontal_3),
+                onPressed: () {},
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 20),
               FloatingActionButton(
+                backgroundColor: theme.locationBtnColor(),
+                child: const Icon(CupertinoIcons.location_north),
                 onPressed: () {
                   onMyLocation();
                 },
-                child: const Icon(CupertinoIcons.location_north),
               ),
+              const SizedBox(height: 60),
+
             ],
           ),
         ));

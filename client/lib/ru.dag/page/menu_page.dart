@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../app/navigation.dart';
-
 class MenuPage extends StatefulWidget {
   const MenuPage({Key? key}) : super(key: key);
 
@@ -14,8 +12,6 @@ class _MenuPageState extends State<MenuPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(child: Text('Меню')),
-      bottomNavigationBar:
-          LetsPlayNavigation.of(LetsPlayNavigation.menuIndex, context),
     );
   }
 }

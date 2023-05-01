@@ -15,7 +15,6 @@ class MapMarkerBuilder {
   static MarkerIcon stadiumMarker() {
     return MarkerIcon(
         assetMarker: AssetMarker(
-            // image: const AssetImage("assets/images/stadium_marker.png"),
             image: const AssetImage("assets/images/stadium_marker.png"),
             scaleAssetImage: 4));
   }

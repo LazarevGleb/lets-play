@@ -10,7 +10,14 @@ data class Player(
     val age: Int,
     val birthDate: Date,
     val rank: Float?,
-    val primaryPosition: Int,
-    val secondaryPosition: Int?,
+    val primaryPosition: Position,
+    val secondaryPosition: Position?,
     val avatar: String?
 )
+
+enum class Position {
+    FORWARD,
+    HALFBACK,
+    DEFENDER,
+    GOALKEEPER,
+}

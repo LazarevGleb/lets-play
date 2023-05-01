@@ -6,6 +6,7 @@ volumes:
 services:
   db:
     image: kartoza/postgis:14-3.3
+    container_name: db
     volumes:
       - postgis-data:/var/lib/postgresql
       - dbbackups:/backups
@@ -15,7 +16,7 @@ services:
       POSTGRES_DB: lets_play
     ports:
       - '5432:5432'
-    restart: always
+    restart: on-failure
     healthcheck:
       test: "PGPASSWORD=postgres pg_isready -h 127.0.0.1 -U postgres -d lets_play"
 
@@ -34,3 +35,18 @@ services:
     depends_on:
       db:
         condition: service_healthy
+  
+  app:
+    image: lets-play:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    environment:
+      - DB_SERVER=db

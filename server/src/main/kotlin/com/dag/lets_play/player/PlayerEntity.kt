@@ -32,10 +32,10 @@ open class PlayerEntity {
     open var rank: Float? = null
 
     @Column(name = "primary_position", nullable = false)
-    open var primaryPosition: Int? = null
+    open var primaryPosition: String? = null
 
     @Column(name = "secondary_position")
-    open var secondaryPosition: Int? = null
+    open var secondaryPosition: String? = null
 
     @Column
     open var avatar: String? = null

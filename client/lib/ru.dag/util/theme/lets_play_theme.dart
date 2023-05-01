@@ -1,13 +1,11 @@
 import 'dart:ui';
 
 abstract class LetsPlayTheme {
+  Color firstColor();
 
-  Color mapTabColor();
-  Color menuTabColor();
-  Color navBarColor();
-  Color navBarTransitionColor();
+  Color secondColor();
 
-  Color filterBtnColor();
-  Color locationBtnColor();
+  Color thirdColor();
 
+  Color fourthColor();
 }

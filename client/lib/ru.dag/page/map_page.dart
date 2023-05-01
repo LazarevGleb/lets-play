@@ -98,20 +98,19 @@ class _MapPageState extends State<MapPage> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               FloatingActionButton(
-                backgroundColor: theme.filterBtnColor(),
+                backgroundColor: theme.secondColor(),
                 child: const Icon(CupertinoIcons.slider_horizontal_3),
                 onPressed: () {},
               ),
               const SizedBox(height: 20),
               FloatingActionButton(
-                backgroundColor: theme.locationBtnColor(),
+                backgroundColor: theme.firstColor(),
                 child: const Icon(CupertinoIcons.location_north),
                 onPressed: () {
                   onMyLocation();
                 },
               ),
               const SizedBox(height: 60),
-
             ],
           ),
         ));

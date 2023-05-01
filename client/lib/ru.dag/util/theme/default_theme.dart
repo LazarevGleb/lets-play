@@ -5,33 +5,22 @@ import 'package:flutter/material.dart';
 
 class DefaultTheme implements LetsPlayTheme {
   @override
-  Color filterBtnColor() {
-    return const Color(0xFFFD9800);
+  Color firstColor() {
+    return const Color(0xFFEB6440);
   }
 
   @override
-  Color locationBtnColor() {
-    return const Color(0xFF8B65A1);
+  Color secondColor() {
+    return const Color(0xFF497174);
   }
 
   @override
-  Color mapTabColor() {
-    return const Color(0xFF1D8AD3);
+  Color thirdColor() {
+    return const Color(0xFFD6E4E5);
   }
 
   @override
-  Color menuTabColor() {
-    return const Color(0xFF24B9B4);
+  Color fourthColor() {
+    return const Color(0xFFEFF5F5);
   }
-
-  @override
-  Color navBarColor() {
-    return const Color(0xFFE5DC55);
-  }
-
-  @override
-  Color navBarTransitionColor() {
-    return const Color(0xFF24B93D);
-  }
-
 }

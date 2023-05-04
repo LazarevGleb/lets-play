@@ -8,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../api/http_client.dart';
 import '../api/stadium_location_request.dart';
 import '../domain/stadium_data.dart';
+import '../util/map_state.dart';
 import '../util/theme/lets_play_theme.dart';
 import '../util/theme/theme_picker.dart';
 import '../widget/map_widget_builder.dart';
@@ -20,6 +21,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
+  MapState state = MapState.map;
   LetsPlayTheme theme = ThemePicker.getCurrentTheme();
 
   GeoPoint home = GeoPoint(latitude: 59.990628, longitude: 30.309782);
@@ -117,35 +119,46 @@ class _MapPageState extends State<MapPage> {
   }
 
   onTap(GeoPoint point) {
-    print("onTap $point");
-    Widget? widget;
+    setState(() {
+      state = MapState.map;
+    });
     mapController.goToLocation(point);
 
     for (var s in stadiumData.values) {
       if (s.location != point) {
         continue;
       }
-      if (s.eventIds.isNotEmpty) {
-        // Загрузим информацию о событиях и отобразим их
-        widget = Text(s.eventIds.toString());
-      } else {
-        // Загрузим информацию о стадионе и отобразим её
-        widget = Text(s.stadiumId.toString());
-      }
-    }
-
-    if (widget == null) {
-      return;
+      //todo
+      // Загрузим информацию о стадионе и событиях
+      setState(() {
+        state = MapState.stadiumEvents;
+      });
     }
 
     showModalBottomSheet(
-        context: context,
-        builder: (context) {
-          return Container(
-            height: 500,
-            child: widget,
-          );
-        });
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      context: context,
+      builder: (context) => GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => Navigator.of(context).pop(),
+        child: GestureDetector(
+          onTap: () {},
+          child: DraggableScrollableSheet(
+            initialChildSize: 0.4,
+            minChildSize: 0.4,
+            maxChildSize: 0.6,
+            builder: (_, controller) => Container(
+                decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(20))),
+                padding: const EdgeInsets.all(15),
+                child: getChild(controller)),
+          ),
+        ),
+      ),
+    );
   }
 
   onMyLocation() async {
@@ -223,5 +236,33 @@ class _MapPageState extends State<MapPage> {
             ),
           );
         });
+  }
+
+  Widget getChild(ScrollController controller) {
+    switch (state) {
+      case MapState.stadiumEvents:
+        {
+          return ListView(controller: controller, children: [
+            Text(
+              "Football is a family of team sports that involve, to varying degrees, Football is a family of team sports that involve, to varying degrees, kickingFootball is a family of team sports that involve, to varying degrees, kickingFootball is a family of team sports that involve, to varying degrees, kickingFootball is a family of team sports that involve, to varying degrees, kickingFootball is a family of team sports that involve, to varying degrees, kickingFootball is a family of team sports that involve, to varying degrees, kickingFootball is a family of team sports that involve, to varying degrees, kickingFootball is a family of team sports that involve, to varying degrees, kickingFootball is a family of team sports that involve, to varying degrees, kickingFootball is a family of team sports that involve, to varying degrees, kickingkicking a ball to score a goal. Unqualified, the word football normally means the form of football that is the most popular where the word is used. Sports commonly called football include association football (known as soccer in North America, Ireland and Australia); gridiron football (specifically American football or Canadian football); Australian rules football; rugby union and rugby league; and Gaelic football.[1] These various forms of football share to varying extents common origins and are known as.There are a number of references to traditional, ancient, or prehistoric ball games played in many different parts of the world.[2][3][4] Contemporary codes of football can be traced back to the codification of these games at English public schools during the 19th century.[5][6] The expansion and cultural influence of the British Empire allowed these rules of football to spread to areas of British influence outside the directly controlled Empire.[7] By the end of the 19th century, distinct regional codes were already developing: Gaelic football, for example, deliberately incorporated the rules of local traditional football games in order to maintain their heritage.[8] In 1888, The Football League was founded in England, becoming the first of many professional football associations. During the 20th century, several of the various kinds of football grew to become some of the most popular team sports in the world.[9]",
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // вот тут мы можем вызвать метод отображения работы с событием
+                setState(() {
+                  state = MapState.eventCreation;
+                });
+                Navigator.of(context).pop();
+              },
+              child: Text("eventCreation"),
+            )
+          ]);
+        }
+      case MapState.eventCreation:
+        return Text(
+            "EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_EVENT_CREATION_");
+      default:
+        return new Text("data");
+    }
   }
 }

@@ -22,7 +22,7 @@ class MapMarkerBuilder {
   static MarkerIcon eventMarker() {
     return MarkerIcon(
         assetMarker: AssetMarker(
-            image: const AssetImage("assets/images/event_marker.png"),
+            image: const AssetImage("assets/images/event_marker_red.png"),
             scaleAssetImage: 4));
   }
 }

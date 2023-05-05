@@ -9,7 +9,7 @@ data class Player(
     val nickname: String,
     val age: Int,
     val birthDate: Date,
-    val rank: Float?,
+    val rank: Double?,
     val primaryPosition: Position,
     val secondaryPosition: Position?,
     val avatar: String?

@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS stadium
     location    GEOMETRY(Point) NOT NULL,
     capacity    TEXT,
     description TEXT,
+    avatar      TEXT,
     data        JSONB,
     created_at  TIMESTAMPTZ     NOT NULL,
     removed_at  TIMESTAMPTZ,

@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class PlayerControllerImpl(private val service: PlayerService) : PlayerController {
 
-    override fun createPlayer(request: Player): ResponseEntity<Player> {
+    override fun create(request: Player): ResponseEntity<Player> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(service.create(request))
     }
 
-    override fun getPlayerByPhone(phone: String): ResponseEntity<Player> {
+    override fun getByPhone(phone: String): ResponseEntity<Player> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(service.getPlayerByPhone(phone))

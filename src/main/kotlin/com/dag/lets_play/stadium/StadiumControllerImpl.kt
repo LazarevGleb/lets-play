@@ -9,26 +9,33 @@ import org.springframework.web.multipart.MultipartFile
 
 @RestController
 class StadiumControllerImpl(private val service: StadiumService) : StadiumController {
-
-    override fun getStadiums(request: GetStadiumRequest): ResponseEntity<List<Stadium>> {
-        return ResponseEntity.ok(service.getStadiums(request))
+    
+    override fun get(id: Long): ResponseEntity<Stadium> {
+        val stadium = service.getStadiumById(id)
+        return ResponseEntity.ok(stadium)
     }
 
-    override fun createStadium(request: Stadium): ResponseEntity<Stadium> {
+    override fun findNearest(request: GetStadiumRequest): ResponseEntity<List<StadiumPreview>> {
+        val stadiumPreviews = service.getStadiumPreviews(request)
+        return ResponseEntity.ok(stadiumPreviews)
+    }
+
+    override fun create(request: Stadium): ResponseEntity<Stadium> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(service.create(request))
     }
 
-    override fun updateStadium(request: Stadium): ResponseEntity<Stadium> {
-        val updated = service.update(request)
+    override fun update(id: Long, request: Stadium): ResponseEntity<Stadium> {
+        val updated = service.update(id, request)
         if (updated > 0) {
             return ResponseEntity.ok().build()
         }
         return ResponseEntity.notFound().build()
     }
 
-    override fun deleteStadium(request: DeleteStadiumRequest): ResponseEntity<Unit> {
+    // TODO Удаление по локации или по id или и так и так?
+    override fun delete(id: Long, request: DeleteStadiumRequest): ResponseEntity<Unit> {
         val removed = service.deleteByLocation(request.location)
         if (removed > 0) {
             return ResponseEntity.noContent().build()
@@ -36,7 +43,7 @@ class StadiumControllerImpl(private val service: StadiumService) : StadiumContro
         return ResponseEntity.notFound().build()
     }
 
-    override fun uploadFile(@RequestParam("file") file: MultipartFile): ResponseEntity<Void> {
+    override fun uploadFile(@RequestParam("file") file: MultipartFile): ResponseEntity<Unit> {
         service.uploadStadiums(file)
         return ResponseEntity.ok().build()
     }

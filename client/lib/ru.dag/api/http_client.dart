@@ -1,4 +1,6 @@
 import 'package:client/ru.dag/api/event_location_request.dart';
+import 'package:client/ru.dag/api/stadium_events_request.dart';
+import 'package:client/ru.dag/api/stadium_events_response.dart';
 import 'package:client/ru.dag/api/stadium_location_request.dart';
 import 'package:client/ru.dag/api/stadium_location_response.dart';
 import 'package:client/ru.dag/app/global_state.dart';
@@ -12,7 +14,7 @@ class LetsPlayHttpClient {
         location: GlobalState.getLocation()!,
         distance: GlobalState.getDistance());
 
-    var path = "assets/config/stadium_location_response.json";
+    var path = "assets/config/stadium_location_response1.json";
     var input = await rootBundle.loadString(path);
     return StadiumLocationResponse.fromJson(input);
   }
@@ -31,5 +33,12 @@ class LetsPlayHttpClient {
     return EventLocationResponse.fromJson(input);
   }
 
-  void findStadiumEvents(int stadiumId, List<int> eventIds) {}
+  Future<StadiumEventResponse> findStadiumEvents(
+      int stadiumId, List<int> eventIds) async {
+    StadiumEventsRequest request = StadiumEventsRequest(stadiumId, eventIds);
+
+    var path = "assets/config/stadium_events_response.json";
+    var input = await rootBundle.loadString(path);
+    return StadiumEventResponse.fromJson(input);
+  }
 }

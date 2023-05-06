@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:client/ru.dag/api/event_location_response.dart';
+import 'package:client/ru.dag/api/stadium_location_response.dart';
+import 'package:client/ru.dag/app/client_notifier.dart';
 import 'package:client/ru.dag/app/global_state.dart';
 import 'package:client/ru.dag/util/text_constant.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,7 +12,6 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../api/http_client.dart';
 import '../domain/stadium_data.dart';
-import '../exception/client_exception.dart';
 import '../util/theme/lets_play_theme.dart';
 import '../util/theme/theme_picker.dart';
 import '../widget/map_widget_builder.dart';
@@ -37,53 +39,36 @@ class _MapPageState extends State<MapPage> {
 
   void loadMarkers() {
     setState(() {
-      // var stadiumRequest = StadiumLocationRequest(
-      //     location: GeoPoint(latitude: 12, longitude: 12), distance: 12);
-
-      // var eventRequest = EventLocationRequest(
-      //     location: GeoPoint(latitude: 12, longitude: 12),
-      //     distance: 12,
-      //     dateFrom: '',
-      //     dateTill: '',
-      //     age: 1,
-      //     rank: 1);
-
-      try {
-        client
-            .findStadiums()
-            // .catchError((error) => handleException(stadiumSearchError))
-            .catchError((error) {
-          throw const ClientException(message: stadiumSearchError);
-        }).then(
-          (value) => {
-            for (var s in value.stadiums)
-              {
-                stadiumData.putIfAbsent(s.id,
-                    () => StadiumData(stadiumId: s.id, location: s.location))
-              },
-            client
-                .findEvents()
-                .catchError((error) =>
-                    throw const ClientException(message: eventSearchError))
-                .then(
-                  (value) => {
-                    for (var e in value.events)
-                      {
-                        stadiumData.update(
-                            e.stadiumId,
-                            (v) => StadiumData.withEvents(
-                                stadiumId: v.stadiumId,
-                                location: v.location,
-                                eventIds: e.eventIds))
-                      },
-                    setupMarkers()
-                  },
-                )
-          },
-        );
-      } on Exception catch (e) {
-        handleException('$e');
-      }
+      client.findStadiums().catchError((error) {
+        ClientNotifier.showError(context, commonErrorText, stadiumSearchError);
+        return const StadiumLocationResponse(stadiums: []);
+      }).then(
+        (value) => {
+          for (var s in value.stadiums)
+            {
+              stadiumData.putIfAbsent(s.id,
+                  () => StadiumData(stadiumId: s.id, location: s.location))
+            },
+          client.findEvents().catchError((error) {
+            ClientNotifier.showError(
+                context, commonErrorText, eventSearchError);
+            return const EventLocationResponse(events: []);
+          }).then(
+            (value) => {
+              for (var e in value.events)
+                {
+                  stadiumData.update(
+                      e.stadiumId,
+                      (v) => StadiumData.withEvents(
+                          stadiumId: v.stadiumId,
+                          location: v.location,
+                          eventIds: e.eventIds))
+                },
+              setupMarkers()
+            },
+          )
+        },
+      );
     });
   }
 
@@ -94,7 +79,6 @@ class _MapPageState extends State<MapPage> {
 
     if (locationGranted) {
       GlobalState.setLocation(await mapController.myLocation());
-
       loadMarkers();
     }
   }
@@ -104,7 +88,7 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
         body: OSMFlutter(
           userLocationMarker: MapMarkerBuilder.playerMarker(),
-          onGeoPointClicked: openStadiumEventsPanel,
+          onGeoPointClicked: onPointClicked,
           onMapIsReady: onMapReady,
           onLocationChanged: onLocationChanged,
           controller: mapController,
@@ -136,19 +120,26 @@ class _MapPageState extends State<MapPage> {
         ));
   }
 
-  openStadiumEventsPanel(GeoPoint point) {
+  onPointClicked(GeoPoint point) {
     mapController.goToLocation(point);
+
+    StadiumData? data;
 
     for (var s in stadiumData.values) {
       if (s.location != point) {
         continue;
       }
-
-      //todo
-      // Загрузим информацию о стадионе и событиях
-      client.findStadiumEvents(s.stadiumId, s.eventIds);
+      data = s;
     }
 
+    data = null;
+    if (data == null) {
+      ClientNotifier.showError(context, commonErrorText, geoPointError);
+      return;
+    }
+
+    //todo
+    client.findStadiumEvents(data.stadiumId, data.eventIds);
     showModalBottomSheet(
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
@@ -169,7 +160,7 @@ class _MapPageState extends State<MapPage> {
                             BorderRadius.vertical(top: Radius.circular(20))),
                     padding: const EdgeInsets.all(15),
                     child: ListView(controller: controller, children: [
-                      Text(
+                      const Text(
                         "Football is a family of team sports that involve, to varying degrees, Football is a family of team "
                         "sports that involve, to varying degrees, kickingFootball is a family of team sports that involve, "
                         "to varying degrees, kickingFootball is a family of team sports that involve, to varying degrees,"
@@ -201,7 +192,7 @@ class _MapPageState extends State<MapPage> {
                           // вот тут мы можем вызвать метод отображения работы с событием
                           Navigator.of(context).pop();
                         },
-                        child: Text("eventCreation"),
+                        child: const Text("eventCreation"),
                       )
                     ]),
                   ),
@@ -279,29 +270,6 @@ class _MapPageState extends State<MapPage> {
                     child: const Text(locationSettingButton),
                     onPressed: () =>
                         {openAppSettings(), Navigator.pop(context)},
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
-  }
-
-  void handleException(String message) {
-    showModalBottomSheet(
-        context: context,
-        builder: (context) {
-          return SizedBox(
-            height: 200,
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Center(child: Text(message)),
-                  ElevatedButton(
-                    child: const Text(confirmButtonText),
-                    onPressed: () => {Navigator.pop(context)},
                   ),
                 ],
               ),

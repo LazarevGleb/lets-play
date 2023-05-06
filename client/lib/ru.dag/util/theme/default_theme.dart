@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:client/ru.dag/util/theme/lets_play_theme.dart';
 import 'package:flutter/material.dart';
 
-class DefaultTheme implements LetsPlayTheme {
+class DefaultTheme extends LetsPlayTheme {
   @override
   Color firstColor() {
     return const Color(0xFFEB6440);

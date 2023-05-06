@@ -1,13 +1,15 @@
 package com.dag.lets_play.stadium
 
+import com.dag.lets_play.utils.BaseDao
 import org.locationtech.jts.geom.Point
 import org.slf4j.LoggerFactory
-import org.springframework.stereotype.Repository
+import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 
-@Repository
-class StadiumDao(private val repository: StadiumRepository) {
-    fun getStadiumsWithinDistance(point: Point, distance: Double): List<StadiumEntity> {
+@Component
+class StadiumDao(private val repository: StadiumRepository) : BaseDao<StadiumEntity>(repository) {
+
+    fun getStadiumsWithinDistance(point: Point, distance: Double): List<IStadiumIdLocation> {
         return repository.findStadiumsWithinDistance(point, distance)
     }
 

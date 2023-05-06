@@ -1,9 +1,10 @@
 package com.dag.lets_play.stadium
 
 import com.dag.lets_play.csv.CsvHelper
-import jakarta.transaction.Transactional
+import com.dag.lets_play.exception.StadiumNotFoundException
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
 
 @Service
@@ -12,10 +13,22 @@ class StadiumService(
     private val mapper: StadiumMapper,
     private val csvHelper: CsvHelper
 ) {
-    fun getStadiums(request: GetStadiumRequest): List<Stadium> {
+
+    fun getStadiumById(id: Long): Stadium {
+        val entity = dao.findById(id)
+        if (entity.isEmpty) {
+            throw StadiumNotFoundException("Can't find stadium by id: $id")
+        }
+        return mapper.toStadium(entity.get())
+    }
+
+    fun getStadiumPreviews(request: GetStadiumRequest): List<StadiumPreview> {
         val point = mapper.locationToPoint(request.location)
-        val stadiumEntities = dao.getStadiumsWithinDistance(point, request.distance)
-        return stadiumEntities.map { mapper.toStadium(it) }
+        val resultSet = dao.getStadiumsWithinDistance(point, request.distance)
+        return resultSet.map {
+            val position = it.location.position
+            StadiumPreview(it.id!!, mapper.positionToLocation(position))
+        }.toList()
     }
 
     @Transactional
@@ -27,8 +40,8 @@ class StadiumService(
     }
 
     @Transactional
-    fun update(stadium: Stadium): Int {
-        val entity = mapper.toEntity(stadium)
+    fun update(id: Long, stadium: Stadium): Int {
+        val entity = mapper.toEntity(stadium, id)
         val rowsUpdated = dao.update(entity)
         if (rowsUpdated > 0) {
             logger.info("Updated stadium: $stadium")
@@ -63,7 +76,7 @@ class StadiumService(
         }
         logger.info("File successfully processed.")
     }
-    
+
     companion object {
         private val logger = LoggerFactory.getLogger(StadiumService::class.java)
     }

@@ -1,10 +1,11 @@
 package com.dag.lets_play.player
 
-import org.springframework.stereotype.Repository
+import com.dag.lets_play.utils.BaseDao
+import org.springframework.stereotype.Component
 import java.util.Optional
 
-@Repository
-class PlayerDao(private val repository: PlayerRepository) {
+@Component
+class PlayerDao(private val repository: PlayerRepository) : BaseDao<PlayerEntity>(repository) {
 
     fun getPlayerByPhone(phone: String): Optional<PlayerEntity?> {
         return repository.findByPhone(phone)

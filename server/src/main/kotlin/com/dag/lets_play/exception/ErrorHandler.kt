@@ -9,6 +9,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 
 @ControllerAdvice
 class ErrorHandler {
+    
+    @ExceptionHandler(value = [
+        PlayerNotFoundException::class,
+        EventNotFoundException::class,
+        StadiumNotFoundException::class
+    ])
+    fun handleNotFoundException(e: RuntimeException, request: HttpServletRequest): ResponseEntity<Any> {
+        logger.warn("Error occurred. ${e.message}")
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build()
+    }
 
     @ExceptionHandler(value = [Exception::class])
     fun handleException(e: Exception, request: HttpServletRequest): ResponseEntity<Any> {

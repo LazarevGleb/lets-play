@@ -1,22 +1,22 @@
 package com.dag.lets_play.stadium
 
+import com.dag.lets_play.utils.BaseRepository
 import org.locationtech.jts.geom.Point
-import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface StadiumRepository : JpaRepository<StadiumEntity, Long> {
+interface StadiumRepository : BaseRepository<StadiumEntity> {
 
     @Query(
         value = """
-            SELECT * FROM stadium
+            SELECT s.id, s.location FROM stadium s
             WHERE ST_DistanceSphere(location, :point) <= :distance
             """,
         nativeQuery = true
     )
-    fun findStadiumsWithinDistance(point: Point, distance: Double): List<StadiumEntity>
+    fun findStadiumsWithinDistance(point: Point, distance: Double): List<IStadiumIdLocation>
 
     @Modifying(clearAutomatically = true)
     @Query(

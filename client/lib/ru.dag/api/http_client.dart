@@ -14,7 +14,7 @@ class LetsPlayHttpClient {
         location: GlobalState.getLocation()!,
         distance: GlobalState.getDistance());
 
-    var path = "assets/config/stadium_location_response1.json";
+    var path = "assets/config/stadium_location_response.json";
     var input = await rootBundle.loadString(path);
     return StadiumLocationResponse.fromJson(input);
   }

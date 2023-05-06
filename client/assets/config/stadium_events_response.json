@@ -23,7 +23,7 @@
       "stadiumId": 0,
       "beginAt": "2023-05-06T15:58:39.554Z",
       "isFinished": true,
-      "isCancelled": "true",
+      "isCancelled": false,
       "currentPlayers": 0,
       "minPlayers": 0,
       "minAge": 0,

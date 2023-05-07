@@ -1,3 +1,5 @@
+const String addNewEventButton = 'Создать новую игру';
+const String noEventsByCriteriaFound = 'Тут нет игр, подходящих под ваши критерии';
 const String commonErrorText = 'Что-то пошло не по плану';
 const String geoPointError = 'Кажется, тут ничего нет';
 const String locationTurnedOffErrorMessage = 'Хмм... Как бы мы ни старались, мы не можем Вас найти';

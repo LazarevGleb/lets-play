@@ -2,9 +2,9 @@ spring:
   application:
     name: "let's play" 
   datasource:
-    url: jdbc:postgresql://${DB_SERVER:localhost:5432}/lets_play
+#    url: jdbc:postgresql://${DB_SERVER:localhost:5432}/lets_play
 #    for windows
-#    url: jdbc:postgresql://${DB_SERVER:192.168.99.102:5432}/lets_play
+    url: jdbc:postgresql://${DB_SERVER:192.168.99.102:5432}/lets_play
     username: postgres
     password: postgres
   jpa:

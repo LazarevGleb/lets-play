@@ -1,14 +1,14 @@
 {
   "stadium": {
     "id": 0,
-    "address": "string",
+    "address": "ул. Пушкина, дом Колотушкина",
     "location": {
       "latitude": 59.955856,
       "longitude": 30.955856
     },
     "capacity": "5x5",
     "avatar": "string",
-    "description": "string",
+    "description": "На этом стадионе играют лучшие типы",
     "data": {
       "additionalProp1": {},
       "additionalProp2": {},
@@ -24,12 +24,12 @@
       "beginAt": "2023-05-06T15:58:39.554Z",
       "isFinished": true,
       "isCancelled": false,
-      "currentPlayers": 0,
-      "minPlayers": 0,
-      "minAge": 0,
-      "maxAge": 0,
+      "currentPlayers": 5,
+      "minPlayers": 8,
+      "minAge": 10,
+      "maxAge": 99,
       "minRank": 0,
-      "maxRank": 0,
+      "maxRank": 10,
       "createdAt": "2023-05-06T15:58:39.554Z"
     }
   ]

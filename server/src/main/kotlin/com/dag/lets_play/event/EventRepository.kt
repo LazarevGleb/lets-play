@@ -29,4 +29,26 @@ interface EventRepository : BaseRepository<EventEntity> {
         age: Int?,
         rank: Double?
     ): List<IEventToStadium>
+
+    @Query(
+        value = """
+            INSERT INTO player_event(player_id, event_id, with_ball)
+            VALUES (:playerId, :eventId, :withBall)
+            ON CONFLICT DO NOTHING
+        """,
+        nativeQuery = true
+    )
+    fun insertIntoPlayerEvent(eventId: Long, playerId: Long, withBall: Boolean?)
+
+    @Query(
+        value = """
+            SELECT EXISTS(
+                SELECT 1 FROM player_event 
+                WHERE player_id = :playerId
+                    AND event_id = :eventId
+            )
+        """,
+        nativeQuery = true
+    )
+    fun existsPlayerEvent(eventId: Long, playerId: Long): Boolean
 }

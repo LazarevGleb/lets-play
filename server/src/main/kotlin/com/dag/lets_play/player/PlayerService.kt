@@ -27,6 +27,14 @@ class PlayerService(
         return mapper.toPlayer(entity)
     }
 
+    fun getById(id: Long): Player {
+        val player = dao.findById(id)
+        if (player.isEmpty) {
+            throw PlayerNotFoundException("Can't find player by id: $id")
+        }
+        return mapper.toPlayer(player.get())
+    }
+
     companion object {
         private val logger = LoggerFactory.getLogger(PlayerService::class.java)
     }

@@ -52,3 +52,7 @@ data class StadiumWithEvents(
     val stadium: Stadium,
     val events: List<Event>
 )
+
+data class AddPlayerToEventRequest(
+    val withBall: Boolean? = false
+)

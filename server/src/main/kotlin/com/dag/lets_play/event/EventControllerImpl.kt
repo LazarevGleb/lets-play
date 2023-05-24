@@ -10,7 +10,7 @@ class EventControllerImpl(
 ) : EventController {
 
     override fun get(id: Long): ResponseEntity<Event> {
-        val event = eventService.getEventById(id)
+        val event = eventService.getById(id)
         return ResponseEntity.ok(event)
     }
 
@@ -27,5 +27,9 @@ class EventControllerImpl(
     override fun create(request: CreateEventRequest): ResponseEntity<Event> {
         val created = eventService.create(request)
         return ResponseEntity.status(HttpStatus.CREATED).body(created)
+    }
+
+    override fun addPlayerToEvent(eventId: Long, playerId: Long, request: AddPlayerToEventRequest) {
+        eventService.addPlayerToEvent(eventId, playerId, request)
     }
 }

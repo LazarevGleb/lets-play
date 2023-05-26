@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 interface PlayerController {
 
     @PostMapping("/")
-    fun create(@RequestBody request: Player): ResponseEntity<Player>
+    fun create(@RequestBody request: CreatePlayerRequest): ResponseEntity<Player>
 
     @GetMapping("/{phone}")
     fun getByPhone(@PathVariable phone: String): ResponseEntity<Player>

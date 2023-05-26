@@ -14,4 +14,8 @@ class PlayerDao(private val repository: PlayerRepository) : BaseDao<PlayerEntity
     fun save(entity: PlayerEntity): PlayerEntity {
         return repository.save(entity)
     }
+
+    fun findByEventId(eventId: Long): List<PlayerEntity?> {
+        return repository.findByEventId(eventId)  
+    }
 }

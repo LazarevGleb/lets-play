@@ -4,7 +4,7 @@ import com.dag.lets_play.utils.BaseEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Table
-import java.util.Date
+import java.time.LocalDate
 
 @Entity
 @Table(name = "player")
@@ -20,7 +20,7 @@ open class PlayerEntity : BaseEntity() {
     open var nickname: String? = null
 
     @Column(name = "birth_date", nullable = false, columnDefinition = "date")
-    open var birthDate: Date? = null
+    open var birthDate: LocalDate? = null
 
     @Column
     open var rank: Double? = null

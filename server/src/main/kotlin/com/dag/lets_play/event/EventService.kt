@@ -2,6 +2,7 @@ package com.dag.lets_play.event
 
 import com.dag.lets_play.exception.EventNotFoundException
 import com.dag.lets_play.exception.PlayerEventAlreadyExists
+import com.dag.lets_play.player.Player
 import com.dag.lets_play.player.PlayerService
 import com.dag.lets_play.stadium.StadiumService
 import org.slf4j.LoggerFactory
@@ -46,9 +47,13 @@ class EventService(
     fun findStadiumWithEvents(request: GetStadiumWithEventsRequests): StadiumWithEvents {
         val stadium = stadiumService.getStadiumById(request.stadiumId)
         val eventEntities = dao.findByIdList(request.ids)
+        val playersPerEvent = mutableMapOf<Long, List<Player>>()
+        for (eventId in request.ids) {
+            playersPerEvent[eventId] = playerService.findByEventId(eventId)
+        }
         return StadiumWithEvents(
             stadium,
-            eventEntities.map { mapper.toEvent(it) }
+            eventEntities.map { mapper.toEvent(it, playersPerEvent[it.id!!]!!) }
         )
     }
 

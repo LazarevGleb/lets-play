@@ -1,5 +1,6 @@
 package com.dag.lets_play.event
 
+import com.dag.lets_play.player.Player
 import com.dag.lets_play.stadium.Location
 import com.dag.lets_play.stadium.Stadium
 import java.time.LocalDateTime
@@ -34,13 +35,13 @@ data class Event(
     val beginAt: LocalDateTime,
     val isFinished: Boolean,
     val isCancelled: Boolean,
-    val currentPlayers: Int,
     val minPlayers: Int?,
     val minAge: Int?,
     val maxAge: Int?,
     val minRank: Double?,
     val maxRank: Double?,
-    val createdAt: LocalDateTime
+    val createdAt: LocalDateTime,
+    var players: List<Player>,
 )
 
 data class EventToStadium(

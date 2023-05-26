@@ -2,6 +2,7 @@ package com.dag.lets_play.event
 
 import com.dag.lets_play.utils.BaseRepository
 import org.locationtech.jts.geom.Point
+import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
@@ -38,6 +39,7 @@ interface EventRepository : BaseRepository<EventEntity> {
         """,
         nativeQuery = true
     )
+    @Modifying
     fun insertIntoPlayerEvent(eventId: Long, playerId: Long, withBall: Boolean?)
 
     @Query(

@@ -20,11 +20,26 @@ class PlayerService(
     }
 
     @Transactional
-    fun create(player: Player): Player {
+    fun create(player: CreatePlayerRequest): Player {
         val entity = mapper.toEntity(player)
         val savedEntity = dao.save(entity)
         logger.info("Saved player: $savedEntity")
         return mapper.toPlayer(entity)
+    }
+
+    fun getById(id: Long): Player {
+        val player = dao.findById(id)
+        if (player.isEmpty) {
+            throw PlayerNotFoundException("Can't find player by id: $id")
+        }
+        return mapper.toPlayer(player.get())
+    }
+
+    fun findByEventId(eventId: Long): List<Player> {
+        val playerEntities = dao.findByEventId(eventId)
+        return playerEntities
+            .filterNotNull()
+            .map { mapper.toPlayer(it) }
     }
 
     companion object {

@@ -21,4 +21,11 @@ interface EventController {
 
     @PostMapping
     fun create(@RequestBody request: CreateEventRequest): ResponseEntity<Event>
+
+    @PostMapping("/{eventId}/players/{playerId}")
+    fun addPlayerToEvent(
+        @PathVariable eventId: Long,
+        @PathVariable playerId: Long,
+        @RequestBody request: AddPlayerToEventRequest
+    )
 }

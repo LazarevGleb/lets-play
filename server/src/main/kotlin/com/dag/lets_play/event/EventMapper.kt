@@ -1,5 +1,6 @@
 package com.dag.lets_play.event
 
+import com.dag.lets_play.player.Player
 import com.dag.lets_play.utils.BaseMapper
 import org.springframework.stereotype.Component
 
@@ -41,12 +42,18 @@ class EventMapper : BaseMapper() {
         beginAt = entity.beginAt!!,
         isFinished = entity.isFinished!!,
         isCancelled = entity.isCancelled!!,
-        currentPlayers = 0, // TODO player_event
         minPlayers = entity.minPlayers,
         minAge = entity.minAge,
         maxAge = entity.maxAge,
         minRank = entity.minRank,
         maxRank = entity.maxRank,
-        createdAt = entity.createdAt!!
+        createdAt = entity.createdAt!!,
+        players = mutableListOf()
     )
+
+    fun toEvent(entity: EventEntity, players: List<Player>): Event {
+        val event = toEvent(entity)
+        event.players = players
+        return event
+    }
 }

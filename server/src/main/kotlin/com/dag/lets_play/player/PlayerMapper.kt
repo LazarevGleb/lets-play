@@ -4,7 +4,6 @@ import com.dag.lets_play.image.ImageProcessor
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.Period
-import java.time.ZoneId
 
 @Component
 class PlayerMapper(
@@ -16,7 +15,7 @@ class PlayerMapper(
         phone = entity.phone!!,
         name = entity.name!!,
         nickname = entity.nickname!!,
-        age = Period.between(entity.birthDate!!.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), LocalDate.now()).years,
+        age = Period.between(entity.birthDate!!, LocalDate.now()).years,
         birthDate = entity.birthDate!!,
         rank = entity.rank,
         primaryPosition = Position.valueOf(entity.primaryPosition!!),
@@ -24,7 +23,7 @@ class PlayerMapper(
         avatar = entity.avatar?.let { imageProcessor.loadImage(it) }
     )
 
-    fun toEntity(player: Player): PlayerEntity {
+    fun toEntity(player: CreatePlayerRequest): PlayerEntity {
         return PlayerEntity().apply {
             name = player.name
             phone = player.phone

@@ -30,6 +30,14 @@ class EventDao(private val repository: EventRepository) : BaseDao<EventEntity>(r
         return repository.findEventToStadiumRelations(point, distance, beginFrom, beginTill, age, rank)
     }
 
+    fun existsPlayerEvent(eventId: Long, playerId: Long): Boolean {
+       return repository.existsPlayerEvent(eventId, playerId)
+    }
+
+    fun addPlayerToEvent(eventId: Long, playerId: Long, withBall: Boolean?) {
+        repository.insertIntoPlayerEvent(eventId, playerId, withBall)
+    }
+
     companion object {
         private val logger = LoggerFactory.getLogger(EventDao::class.java)
     }

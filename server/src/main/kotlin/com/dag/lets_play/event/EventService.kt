@@ -1,6 +1,9 @@
 package com.dag.lets_play.event
 
 import com.dag.lets_play.exception.EventNotFoundException
+import com.dag.lets_play.exception.PlayerEventAlreadyExists
+import com.dag.lets_play.player.Player
+import com.dag.lets_play.player.PlayerService
 import com.dag.lets_play.stadium.StadiumService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -10,10 +13,11 @@ import org.springframework.transaction.annotation.Transactional
 class EventService(
     private val dao: EventDao,
     private val mapper: EventMapper,
-    private val stadiumService: StadiumService
+    private val stadiumService: StadiumService,
+    private val playerService: PlayerService,
 ) {
 
-    fun getEventById(id: Long): Event {
+    fun getById(id: Long): Event {
         val entity = dao.findById(id)
         if (entity.isEmpty) {
             throw EventNotFoundException("Can't find event by id: $id")
@@ -43,9 +47,13 @@ class EventService(
     fun findStadiumWithEvents(request: GetStadiumWithEventsRequests): StadiumWithEvents {
         val stadium = stadiumService.getStadiumById(request.stadiumId)
         val eventEntities = dao.findByIdList(request.ids)
+        val playersPerEvent = mutableMapOf<Long, List<Player>>()
+        for (eventId in request.ids) {
+            playersPerEvent[eventId] = playerService.findByEventId(eventId)
+        }
         return StadiumWithEvents(
             stadium,
-            eventEntities.map { mapper.toEvent(it) }
+            eventEntities.map { mapper.toEvent(it, playersPerEvent[it.id!!]!!) }
         )
     }
 
@@ -55,6 +63,19 @@ class EventService(
         val savedEntity = dao.create(entity)
         logger.info("Saved event: $savedEntity")
         return mapper.toEvent(savedEntity)
+    }
+
+    @Transactional
+    fun addPlayerToEvent(eventId: Long, playerId: Long, request: AddPlayerToEventRequest) {
+        // проверка, что стадион и игрок существуют
+        getById(eventId)
+        playerService.getById(playerId)
+        
+        val exists = dao.existsPlayerEvent(eventId, playerId)
+        if (exists) {
+            throw PlayerEventAlreadyExists("Player=[$playerId] already added to event=[$eventId]")
+        }
+        dao.addPlayerToEvent(eventId, playerId, request.withBall)
     }
 
     companion object {

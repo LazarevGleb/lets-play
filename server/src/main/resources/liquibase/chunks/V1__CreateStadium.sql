@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS stadium
 (
-    id          SERIAL          NOT NULL,
+    id          BIGSERIAL       NOT NULL,
     address     TEXT            NOT NULL,
     location    GEOMETRY(Point) NOT NULL,
     capacity    TEXT,

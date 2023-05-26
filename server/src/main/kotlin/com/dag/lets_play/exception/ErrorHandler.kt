@@ -9,16 +9,29 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 
 @ControllerAdvice
 class ErrorHandler {
-    
-    @ExceptionHandler(value = [
-        PlayerNotFoundException::class,
-        EventNotFoundException::class,
-        StadiumNotFoundException::class
-    ])
+
+    @ExceptionHandler(
+        value = [
+            PlayerNotFoundException::class,
+            EventNotFoundException::class,
+            StadiumNotFoundException::class
+        ]
+    )
     fun handleNotFoundException(e: RuntimeException, request: HttpServletRequest): ResponseEntity<Any> {
-        logger.warn("Error occurred. ${e.message}")
+        logger.warn("Not found exception. ${e.message}")
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build()
     }
+
+    @ExceptionHandler(
+        value = [
+            PlayerEventAlreadyExists::class,
+        ]
+    )
+    fun handleAlreadyExists(e: RuntimeException, request: HttpServletRequest): ResponseEntity<Any> {
+        logger.warn("Already exists exception. ${e.message}")
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build()
+    }
+
 
     @ExceptionHandler(value = [Exception::class])
     fun handleException(e: Exception, request: HttpServletRequest): ResponseEntity<Any> {

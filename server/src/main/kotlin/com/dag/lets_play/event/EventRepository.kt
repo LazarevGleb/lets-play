@@ -2,6 +2,7 @@ package com.dag.lets_play.event
 
 import com.dag.lets_play.utils.BaseRepository
 import org.locationtech.jts.geom.Point
+import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
@@ -29,4 +30,27 @@ interface EventRepository : BaseRepository<EventEntity> {
         age: Int?,
         rank: Double?
     ): List<IEventToStadium>
+
+    @Query(
+        value = """
+            INSERT INTO player_event(player_id, event_id, with_ball)
+            VALUES (:playerId, :eventId, :withBall)
+            ON CONFLICT DO NOTHING
+        """,
+        nativeQuery = true
+    )
+    @Modifying
+    fun insertIntoPlayerEvent(eventId: Long, playerId: Long, withBall: Boolean?)
+
+    @Query(
+        value = """
+            SELECT EXISTS(
+                SELECT 1 FROM player_event 
+                WHERE player_id = :playerId
+                    AND event_id = :eventId
+            )
+        """,
+        nativeQuery = true
+    )
+    fun existsPlayerEvent(eventId: Long, playerId: Long): Boolean
 }

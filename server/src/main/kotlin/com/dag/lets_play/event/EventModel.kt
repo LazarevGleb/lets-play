@@ -41,7 +41,7 @@ data class Event(
     val minRank: Double?,
     val maxRank: Double?,
     val createdAt: LocalDateTime,
-    var players: List<Player>,
+    val players: List<Player>,
 )
 
 data class EventToStadium(

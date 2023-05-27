@@ -1,5 +1,6 @@
 package com.dag.lets_play.player
 
+import com.dag.lets_play.validation.ValidPhone
 import java.time.LocalDate
 
 data class Player(
@@ -17,7 +18,8 @@ data class Player(
 
 data class CreatePlayerRequest(
     val name: String,
-    val phone: String, // TODO валидация
+    @field:ValidPhone
+    val phone: String,
     val nickname: String,
     val birthDate: LocalDate,
     val rank: Double?,

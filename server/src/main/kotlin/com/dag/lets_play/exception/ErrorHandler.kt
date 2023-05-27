@@ -1,14 +1,42 @@
 package com.dag.lets_play.exception
 
 import jakarta.servlet.http.HttpServletRequest
+import jakarta.validation.ConstraintViolationException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.FieldError
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 
+
 @ControllerAdvice
 class ErrorHandler {
+
+    @ExceptionHandler(value = [ConstraintViolationException::class])
+    fun handleConstraintViolationException(
+        e: ConstraintViolationException,
+        request: HttpServletRequest
+    ): ResponseEntity<Any> {
+        logger.warn("Validation failed. ${e.constraintViolations.map { "${it.invalidValue} in ${it.propertyPath}" }}")
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build()
+    }
+
+    @ExceptionHandler(value = [MethodArgumentNotValidException::class])
+    fun handleConstraintViolationException(
+        e: MethodArgumentNotValidException,
+        request: HttpServletRequest
+    ): ResponseEntity<Any> {
+        val errors = mutableMapOf<String, String>()
+        e.bindingResult.allErrors.forEach { error ->
+            val fieldName = (error as FieldError).field
+            val errorMessage = error.getDefaultMessage()!!
+            errors[fieldName] = errorMessage
+        }
+        logger.warn("Validation failed. ${errors.map { "${it.key} ${it.value}" }}")
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build()
+    }
 
     @ExceptionHandler(
         value = [
@@ -31,7 +59,6 @@ class ErrorHandler {
         logger.warn("Already exists exception. ${e.message}")
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build()
     }
-
 
     @ExceptionHandler(value = [Exception::class])
     fun handleException(e: Exception, request: HttpServletRequest): ResponseEntity<Any> {

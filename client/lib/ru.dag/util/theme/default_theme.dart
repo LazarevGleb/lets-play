@@ -16,7 +16,7 @@ class DefaultTheme extends LetsPlayTheme {
 
   @override
   Color thirdColor() {
-    return const Color(0xFFD6E4E5);
+    return const Color(0xFF757572);
   }
 
   @override

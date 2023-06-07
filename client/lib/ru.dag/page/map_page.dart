@@ -173,16 +173,32 @@ class _MapPageState extends State<MapPage> {
     //todo
     List<Widget> events = [];
     for (var event in response!.events) {
-      events.add(const EventPickerWidget(
-          header: "Кол-во игроков: 5/10",
-          text: "В этой игре будут ебашить по ногам",
-          color: Colors.blue));
+      int players = event.currentPlayers;
+      String beginAt = event.beginAt;
+      events.add(EventPickerWidget(
+          header: "Кол-во игроков: $players",
+          text: "Дата игры: $beginAt",
+          color: theme.thirdColor()));
+      events.add(const SizedBox(
+        height: 5,
+      ));
+      events.add(EventPickerWidget(
+          header: "Кол-во игроков: $players",
+          text: "Дата игры: $beginAt",
+          color: theme.thirdColor()));
+      events.add(const SizedBox(
+        height: 5,
+      ));
+      events.add(EventPickerWidget(
+          header: "Кол-во игроков: $players",
+          text: "Дата игры: $beginAt",
+          color: theme.thirdColor()));
       events.add(const SizedBox(
         height: 5,
       ));
     }
 
-    events = [];
+    // events = [];
 
     showModalBottomSheet(
         isScrollControlled: true,
@@ -204,27 +220,38 @@ class _MapPageState extends State<MapPage> {
                           borderRadius:
                               BorderRadius.vertical(top: Radius.circular(20))),
                       padding: const EdgeInsets.all(15),
-                      child: ListView(controller: controller, children: [
-                        StadiumWidget(
-                          header: response!.stadium.description,
-                          text: response!.stadium.address,
-                          color: Colors.green,
-                        ),
-                        const SizedBox(height: 15),
-                        events.isEmpty
-                            ? const Center(child: Text(noEventsByCriteriaFound))
-                            : ListView(
-                                shrinkWrap: true,
-                                physics: const ClampingScrollPhysics(),
-                                children: events,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: ListView(controller: controller, children: [
+                              StadiumWidget(
+                                header: response!.stadium.description,
+                                text: response!.stadium.address,
+                                color: theme.firstColor(),
                               ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text(addNewEventButton),
-                        )
-                      ]),
+                              const SizedBox(height: 15),
+                              events.isEmpty
+                                  ? const Center(
+                                      child: Text(noEventsByCriteriaFound))
+                                  : ListView(
+                                      shrinkWrap: true,
+                                      physics: const ClampingScrollPhysics(),
+                                      children: events,
+                                    ),
+                            ]),
+                          ),
+                          const SizedBox(height: 15),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(theme.secondColor()),
+                            ),
+                            child: const Text(addNewEventButton),
+                          )
+                        ],
+                      ),
                     );
                   },
                 ),

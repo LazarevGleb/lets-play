@@ -9,10 +9,12 @@ class Event {
   final int maxAge;
   final int minRank;
   final int maxRank;
+  final int currentPlayers;
   final String createdAt;
 
   Event(
       {required this.id,
+
       required this.stadiumId,
       required this.beginAt,
       required this.isFinished,
@@ -22,6 +24,7 @@ class Event {
       required this.maxAge,
       required this.minRank,
       required this.maxRank,
+      required this.currentPlayers,
       required this.createdAt});
 
   factory Event.fromJson(Map<String, dynamic> map) {
@@ -37,6 +40,7 @@ class Event {
       minRank: map["minRank"],
       maxRank: map["maxRank"],
       minPlayers: map["minPlayers"],
+      currentPlayers: map["currentPlayers"],
     );
   }
 }
